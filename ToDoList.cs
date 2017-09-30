@@ -25,14 +25,17 @@ namespace ToDoMod
         private readonly ClickableTextureComponent DownArrow;
         private readonly ClickableTextureComponent Scrollbar;
         
-        private readonly List<OptionsElement> Options = new List<OptionsElement>();
-        private readonly List<ClickableComponent> OptionSlots = new List<ClickableComponent>();
-        
         private Rectangle ScrollbarRunner;
         private bool CanClose;
         
 
         private readonly ClickableComponent Title;
+
+        
+
+        private TaskType taskType;
+
+        
 
 
 
@@ -57,11 +60,9 @@ namespace ToDoMod
 
             this.Title = new ClickableComponent(new Rectangle(this.xPositionOnScreen + width / 2, this.yPositionOnScreen, Game1.tileSize * 4, Game1.tileSize), "To Do List");
             
-            for (int i = 0; i < 3; i++)
-                this.OptionSlots.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4, this.yPositionOnScreen + Game1.tileSize * 5 / 4 + Game1.pixelZoom + i * ((height - Game1.tileSize * 2) / 2), width - Game1.tileSize / 2, (height - Game1.tileSize * 2) / 2 + Game1.pixelZoom), string.Concat(i)));
-            this.Options.Add(new OptionsCheckbox("Open On Startup", 0));
-            this.Options.Add(new OptionsCheckbox("Open On Exit", 1));
-            this.Options.Add(new OptionsInputListener("Save", 2, this.OptionSlots[0].bounds.Width));
+
+            taskType = new TaskType();
+
 
 
         }
@@ -82,6 +83,8 @@ namespace ToDoMod
             this.CanClose = true;
         }
 
+        
+
 
 
 
@@ -97,6 +100,10 @@ namespace ToDoMod
 
             IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(403, 383, 6, 6), this.ScrollbarRunner.X, this.ScrollbarRunner.Y, this.ScrollbarRunner.Width, this.ScrollbarRunner.Height, Color.White, Game1.pixelZoom, false);
             this.Scrollbar.draw(batch);
+            this.taskType.draw(batch);
+            
+            this.drawMouse(batch);
+            
 
 
         }
