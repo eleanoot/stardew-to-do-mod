@@ -26,7 +26,7 @@ namespace ToDoMod
         private readonly ClickableTextureComponent Scrollbar;
         
         private Rectangle ScrollbarRunner;
-        private bool CanClose;
+        private bool CanClose = true;
         
 
         private readonly ClickableComponent Title;
@@ -62,7 +62,8 @@ namespace ToDoMod
             
 
             taskType = new TaskType();
-
+            Game1.activeClickableMenu = taskType;
+            
 
 
         }
@@ -74,7 +75,7 @@ namespace ToDoMod
 
         public override void receiveKeyPress(Keys key)
         {
-            if ((Game1.options.menuButton.Contains(new InputButton(key)) || key == Keys.N) && this.readyToClose() && this.CanClose)
+            if ((Game1.options.menuButton.Contains(new InputButton(key)) || key == Keys.F2) && this.readyToClose() && this.CanClose)
             {
                 Game1.exitActiveMenu();
                 return;

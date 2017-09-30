@@ -16,6 +16,9 @@ namespace ToDoMod
          ********/
         /// <summary>The mod settings.</summary>
         private ModConfig Config;
+        private ToDoList toDoList;
+
+       
 
         /********
          ** Public methods
@@ -24,6 +27,7 @@ namespace ToDoMod
         public override void Entry(IModHelper helper)
         {
             ControlEvents.KeyPressed += this.ControlEvents_KeyPress;
+            
         }
 
         /********
@@ -46,11 +50,14 @@ namespace ToDoMod
 
         private void ControlEvents_KeyPress(object sender, EventArgsKeyPressed e)
         {
-
-            if ((Context.IsWorldReady) && (e.KeyPressed == Keys.N))
+            if ((Context.IsWorldReady) && (Context.IsPlayerFree))
             {
-                this.OpenMenus();
+                if (e.KeyPressed == Keys.F2)
+                {
+                    this.OpenMenus();
+                }
             }
+            
         }
     }
 }
