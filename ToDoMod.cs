@@ -18,7 +18,7 @@ namespace ToDoMod
         private ModConfig Config;
         private ToDoList toDoList;
 
-       
+
 
         /********
          ** Public methods
@@ -26,8 +26,9 @@ namespace ToDoMod
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
         public override void Entry(IModHelper helper)
         {
+            this.Config = helper.ReadConfig<ModConfig>();
             ControlEvents.KeyPressed += this.ControlEvents_KeyPress;
-            
+
         }
 
         /********
@@ -52,12 +53,12 @@ namespace ToDoMod
         {
             if ((Context.IsWorldReady) && (Context.IsPlayerFree))
             {
-                if (e.KeyPressed == Keys.F2)
+                if (e.KeyPressed.ToString() == this.Config.OpenListKey)
                 {
                     this.OpenMenus();
                 }
             }
-            
+
         }
     }
 }

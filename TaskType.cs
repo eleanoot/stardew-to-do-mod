@@ -48,7 +48,7 @@ namespace ToDoMod
             textureComponent1.myID = num1;
             int num2 = 102;
             textureComponent1.leftNeighborID = num2;
-            
+
             ClickableTextureComponent textureComponent2 = new ClickableTextureComponent(new Rectangle(this.textBox.X + this.textBox.Width + Game1.tileSize / 2 + Game1.pixelZoom, Game1.viewport.Height / 2 - Game1.pixelZoom * 2 + 200, Game1.tileSize, Game1.tileSize), Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1), 1f, false);
             int num3 = 102;
             textureComponent2.myID = num3;
@@ -66,10 +66,10 @@ namespace ToDoMod
             this.populateClickableComponentList();
             this.snapToDefaultClickableComponent();
 
-            
+
         }
 
-         
+
         public override void receiveKeyPress(Keys key)
         {
             if (this.textBox.Selected || Game1.options.doesInputListContain(Game1.options.menuButton, key))
@@ -95,9 +95,9 @@ namespace ToDoMod
                 //textBox.Selected = true;
                 this.textBox.SelectMe();
                 Game1.activeClickableMenu = this;
-                
+
             }
-                       
+
         }
 
 
@@ -111,7 +111,7 @@ namespace ToDoMod
     }
 
 
-        
-    
-    
+
+
+
 }

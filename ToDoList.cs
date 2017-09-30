@@ -24,18 +24,18 @@ namespace ToDoMod
         private readonly ClickableTextureComponent UpArrow;
         private readonly ClickableTextureComponent DownArrow;
         private readonly ClickableTextureComponent Scrollbar;
-        
+
         private Rectangle ScrollbarRunner;
-        private bool CanClose = true;
-        
+        private bool CanClose;
+
 
         private readonly ClickableComponent Title;
 
-        
+
 
         private TaskType taskType;
 
-        
+
 
 
 
@@ -59,11 +59,11 @@ namespace ToDoMod
             this.ScrollbarRunner = new Rectangle(this.Scrollbar.bounds.X, this.UpArrow.bounds.Y + this.UpArrow.bounds.Height + Game1.pixelZoom, this.Scrollbar.bounds.Width, height - Game1.tileSize * 2 - this.UpArrow.bounds.Height - Game1.pixelZoom * 2);
 
             this.Title = new ClickableComponent(new Rectangle(this.xPositionOnScreen + width / 2, this.yPositionOnScreen, Game1.tileSize * 4, Game1.tileSize), "To Do List");
-            
+
 
             taskType = new TaskType();
             Game1.activeClickableMenu = taskType;
-            
+
 
 
         }
@@ -84,7 +84,7 @@ namespace ToDoMod
             this.CanClose = true;
         }
 
-        
+
 
 
 
@@ -102,9 +102,9 @@ namespace ToDoMod
             IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(403, 383, 6, 6), this.ScrollbarRunner.X, this.ScrollbarRunner.Y, this.ScrollbarRunner.Width, this.ScrollbarRunner.Height, Color.White, Game1.pixelZoom, false);
             this.Scrollbar.draw(batch);
             this.taskType.draw(batch);
-            
+
             this.drawMouse(batch);
-            
+
 
 
         }
