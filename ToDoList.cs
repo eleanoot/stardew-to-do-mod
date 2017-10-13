@@ -230,9 +230,8 @@ namespace ToDoMod
                 {
                     if (this.taskPages.Count<List<String>>() > 0 && this.taskPages[this.currentPage].Count<String>() > index)
                     {
-                        IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
-                        Utility.drawWithShadow(batch, Game1.mouseCursors, new Vector2((float)(this.taskPageButtons[index].bounds.X + Game1.tileSize / 2), (float)(this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 7)), new Rectangle(410, 501, 9, 9), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, false, 0.99f, -1, -1, 0.35f);
-                        SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
+                        IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom - IClickableMenu.borderWidth - 80, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 55, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 2 - 4, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
+                        SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom - 20, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 50, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
                         
                     }
                 }
@@ -243,7 +242,7 @@ namespace ToDoMod
                 this.forwardButton.draw(batch);
             if (this.currentPage > 0 || this.TaskPage != -1)
                 this.backButton.draw(batch);
-            //this.upperRightCloseButton.draw(batch);
+            
             base.draw(batch);
             
             Game1.mouseCursorTransparency = 1f;
