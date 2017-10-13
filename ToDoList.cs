@@ -237,8 +237,7 @@ namespace ToDoMod
                         //IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
                         //SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
                         IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 4 - 20, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
-                        SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 20, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 75, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
-
+                        SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 30, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
                     }
                 }
             }
