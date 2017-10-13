@@ -31,7 +31,7 @@ namespace ToDoMod
         private TaskType taskType;
 
         private int TaskPage = -1;
-        public const int tasksPerPage = 6;
+        public const int tasksPerPage = 5;
         private List<List<String>> taskPages;
         private List<String> loadedTaskNames;
         private List<ClickableComponent> taskPageButtons;
@@ -45,26 +45,34 @@ namespace ToDoMod
         ** Public methods
         *********/
 
+            /*
         public ToDoList(int currentIndex, ModConfig config, Action saveConfig)
             : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2,
                    Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2,
                    800 + IClickableMenu.borderWidth * 2,
                    450 + IClickableMenu.borderWidth * 2,
                    true)
+                   */
+        public ToDoList(int currentIndex, ModConfig config, Action saveConfig) : base(0, 0, 0, 0, true)
         {
             this.Config = config;
             this.SaveConfig = saveConfig;
-            
+            this.width = Game1.tileSize * 13;
+            this.height = Game1.tileSize * 9;
+            Vector2 centeringOnScreen = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height, 0, 0);
+            this.xPositionOnScreen = (int)centeringOnScreen.X;
+            this.yPositionOnScreen = Game1.viewport.Height / 2 - (700 + IClickableMenu.borderWidth * 2) / 2;
+
             this.Title = new ClickableComponent(new Rectangle(this.xPositionOnScreen + width / 2, this.yPositionOnScreen, Game1.tileSize * 4, Game1.tileSize), "To Do List");
 
-            this.upperRightCloseButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width - 5 * Game1.pixelZoom, this.yPositionOnScreen - 2 * Game1.pixelZoom, 12 * Game1.pixelZoom, 12 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(337, 494, 12, 12), (float)Game1.pixelZoom, false);
+            this.upperRightCloseButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width - 2 * Game1.pixelZoom, this.yPositionOnScreen + 15 * Game1.pixelZoom, 12 * Game1.pixelZoom, 12 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(337, 494, 12, 12), (float)Game1.pixelZoom, false);
 
             taskType = new TaskType();
             //Game1.activeClickableMenu = taskType;
 
             this.loadedTaskNames = new List<String>();
             this.taskPageButtons = new List<ClickableComponent>();
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < tasksPerPage; ++index)
             {
                 List<ClickableComponent> taskPageButtons = this.taskPageButtons;
                 ClickableComponent clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4, this.yPositionOnScreen + Game1.tileSize / 4 + index * ((this.height - Game1.tileSize / 2) / 6), this.width - Game1.tileSize / 2, (this.height - Game1.tileSize / 2) / 6 + Game1.pixelZoom), string.Concat((object)index));
@@ -212,10 +220,10 @@ namespace ToDoMod
             
             this.taskType.draw(batch);
 
-            
+
 
             /* Task boxes */
-
+            
             if (this.TaskPage == -1)
             {
                 for (int index = 0; index < this.taskPageButtons.Count; ++index)
@@ -229,13 +237,15 @@ namespace ToDoMod
                     }
                 }
             }
+            
 
             if (this.currentPage < this.taskPages.Count - 1 && this.TaskPage == -1)
                 this.forwardButton.draw(batch);
             if (this.currentPage > 0 || this.TaskPage != -1)
                 this.backButton.draw(batch);
+            //this.upperRightCloseButton.draw(batch);
             base.draw(batch);
-
+            
             Game1.mouseCursorTransparency = 1f;
             this.drawMouse(batch);
 
