@@ -81,7 +81,7 @@ namespace ToDoMod
                 taskPageButtons.Add(clickableComponent);
             }
 
-            ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize, this.yPositionOnScreen + Game1.pixelZoom * 2, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), (float)Game1.pixelZoom, false);
+            ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize, this.yPositionOnScreen + this.height - 12 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), (float)Game1.pixelZoom, false);
             int num5 = 102;
             textureComponent1.myID = num5;
             int num6 = -7777;
@@ -91,8 +91,7 @@ namespace ToDoMod
             int num7 = 101;
             textureComponent2.myID = num7;
             this.forwardButton = textureComponent2;
-            ClickableTextureComponent textureComponent3 = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width / 2 - Game1.pixelZoom * 20, this.yPositionOnScreen + this.height - Game1.tileSize / 2 - 24 * Game1.pixelZoom, 24 * Game1.pixelZoom, 24 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(293, 360, 24, 24), (float)Game1.pixelZoom, true);
-            
+                  
 
 
 
@@ -137,6 +136,48 @@ namespace ToDoMod
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
 
+        }
+
+        private void taskPageForwardButton()
+        {
+            this.currentPage = this.currentPage + 1;
+            Game1.playSound("shwip");
+        }
+
+        private void taskPageBackButton()
+        {
+            this.currentPage = this.currentPage - 1;
+            Game1.playSound("shwip");
+        }
+
+        public override void receiveLeftClick(int x, int y, bool playSound = true)
+        {
+            base.receiveLeftClick(x, y, playSound);
+            if (Game1.activeClickableMenu == null)
+                return;
+            if (this.TaskPage == -1)
+            {
+                for (int index = 0; index < this.taskPageButtons.Count; ++index)
+                {
+                    if (this.taskPages.Count > 0 && this.taskPages[this.currentPage].Count > index && this.taskPageButtons[index].containsPoint(x, y))
+                    {
+                        Game1.playSound("smallSelect");
+                        this.TaskPage = index;
+                        return;
+                    }
+                }
+                if (this.currentPage < this.taskPages.Count - 1 && this.forwardButton.containsPoint(x, y))
+                    this.taskPageForwardButton();
+                else if (this.currentPage > 0 && this.backButton.containsPoint(x, y))
+                {
+                    this.taskPageBackButton();
+                }
+                else
+                {
+                    Game1.playSound("bigDeSelect");
+                    this.exitThisMenu(true);
+                }
+            }
         }
 
         public override void receiveKeyPress(Keys key)
