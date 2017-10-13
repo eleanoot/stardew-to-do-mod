@@ -62,7 +62,7 @@ namespace ToDoMod
 
 
             taskType = new TaskType();
-            Game1.activeClickableMenu = taskType;
+            //Game1.activeClickableMenu = taskType;
 
 
 
@@ -75,6 +75,10 @@ namespace ToDoMod
 
         public override void receiveKeyPress(Keys key)
         {
+            if (Game1.options.doesInputListContain(Game1.options.menuButton, key))
+            {
+                return;
+            }
             if ((Game1.options.menuButton.Contains(new InputButton(key)) || key == Keys.F2) && this.readyToClose() && this.CanClose)
             {
                 Game1.exitActiveMenu();
