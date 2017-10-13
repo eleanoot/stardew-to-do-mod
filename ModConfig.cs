@@ -10,5 +10,7 @@ namespace ToDoMod
     class ModConfig
     {
         public string OpenListKey { get; set; } = Keys.F2.ToString();
+
+        public string TaskListName { get; set; } = "TaskList.txt";
     }
 }

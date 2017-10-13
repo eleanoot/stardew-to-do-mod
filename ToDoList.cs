@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -27,18 +30,18 @@ namespace ToDoMod
 
         private Rectangle ScrollbarRunner;
         private bool CanClose;
-
-
         private readonly ClickableComponent Title;
-
-
 
         private TaskType taskType;
 
-
-
-
-
+        private int TaskPage = -1;
+        public const int tasksPerPage = 6;
+        private List<List<Task>> tasks;
+        private int currentPage;
+        public const int region_forwardButton = 101;
+        public const int region_backButton = 102;
+        public ClickableTextureComponent forwardButton;
+        public ClickableTextureComponent backButton;
 
         /*********
         ** Public methods
@@ -60,12 +63,39 @@ namespace ToDoMod
 
             this.Title = new ClickableComponent(new Rectangle(this.xPositionOnScreen + width / 2, this.yPositionOnScreen, Game1.tileSize * 4, Game1.tileSize), "To Do List");
 
+            this.upperRightCloseButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width - 5 * Game1.pixelZoom, this.yPositionOnScreen - 2 * Game1.pixelZoom, 12 * Game1.pixelZoom, 12 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(337, 494, 12, 12), (float)Game1.pixelZoom, false);
 
             taskType = new TaskType();
             //Game1.activeClickableMenu = taskType;
 
+            loadTaskList();
+            this.pageTasks();
 
+        }
 
+        private void pageTasks()
+        {
+            this.tasks = new List<List<Task>>();
+
+        }
+
+        private void loadTaskList()
+        {
+            if (!File.Exists("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt"))
+            {
+                using (FileStream fs = File.Create("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt"))
+                {
+
+                }
+            }
+            using (StreamReader sr = File.OpenText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt"))
+            {
+                string s = "";
+                while ((s = sr.ReadLine()) != null)
+                {
+                    taskType.textBox.Text = s;
+                }
+            }
         }
 
         public override void receiveRightClick(int x, int y, bool playSound = true)
@@ -111,6 +141,11 @@ namespace ToDoMod
 
 
 
+        }
+
+        public void Entry(IModHelper helper)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -12,7 +12,8 @@ namespace ToDoMod
 {
     class TaskType : IClickableMenu
     {
-        protected TextBox textBox;
+        //protected TextBox textBox;
+        public TextBox textBox;
         public ClickableComponent textBoxCC;
         private TextBoxEvent e;
 
