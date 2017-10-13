@@ -75,7 +75,7 @@ namespace ToDoMod
             for (int index = 0; index < tasksPerPage; ++index)
             {
                 List<ClickableComponent> taskPageButtons = this.taskPageButtons;
-                ClickableComponent clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4, this.yPositionOnScreen + Game1.tileSize / 4 + index * ((this.height - Game1.tileSize / 2) / 6), this.width - Game1.tileSize / 2, (this.height - Game1.tileSize / 2) / 6 + Game1.pixelZoom), string.Concat((object)index));
+                ClickableComponent clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen + Game1.tileSize / 4 + index * ((this.height - Game1.tileSize / 2) / 6), this.width - Game1.tileSize / 2, (this.height - Game1.tileSize / 2) / 6 + Game1.pixelZoom), string.Concat((object)index));
                 clickableComponent.myID = index;
                 clickableComponent.downNeighborID = -7777;
                 int num1 = index > 0 ? index - 1 : -1;
@@ -230,9 +230,15 @@ namespace ToDoMod
                 {
                     if (this.taskPages.Count<List<String>>() > 0 && this.taskPages[this.currentPage].Count<String>() > index)
                     {
-                        IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom - IClickableMenu.borderWidth - 80, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 55, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 2 - 4, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
+                        //IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom - IClickableMenu.borderWidth - 80, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 55, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 2 - 4, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
+                        //SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 20, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 75, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
+
+
+                        //IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
+                        //SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
+                        IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 4 - 20, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
                         SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 20, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 75, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
-                        
+
                     }
                 }
             }
