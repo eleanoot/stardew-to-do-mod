@@ -11,6 +11,11 @@ namespace ToDoMod
 {
     class Task
     {
-        
+        public string taskName;
+
+        public Task(String name)
+        {
+            this.taskName = name;
+        }
     }
 }
