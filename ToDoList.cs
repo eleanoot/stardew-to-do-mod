@@ -169,8 +169,23 @@ namespace ToDoMod
                 {
                     if (this.taskPages.Count > 0 && this.taskPages[this.currentPage].Count > index && this.taskPageButtons[index].containsPoint(x, y))
                     {
+                        int removeIndex = this.taskPageButtons[index].myID;
+
+
                         Game1.playSound("smallSelect");
-                        this.TaskPage = index;
+                  
+
+                        var tempFile = Path.GetTempFileName();
+                        var linesToKeep = File.ReadLines("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt").Where(l => l != loadedTaskNames[index]);
+
+                        File.WriteAllLines(tempFile, linesToKeep);
+
+                        File.Delete("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt");
+                        File.Move(tempFile, "C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt");
+
+                        //taskPageButtons.RemoveAt(removeIndex);
+                        //loadedTaskNames.RemoveAt();
+
                         return;
                     }
                 }
@@ -185,6 +200,7 @@ namespace ToDoMod
                     Game1.playSound("bigDeSelect");
                     this.exitThisMenu(true);
                 }
+
             }
         }
 

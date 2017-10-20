@@ -11,6 +11,6 @@ namespace ToDoMod
     {
         public string OpenListKey { get; set; } = Keys.F2.ToString();
 
-        public string TaskListName { get; set; } = "TaskList.txt";
+        public string TaskListPath { get; set; } = ".\\Resources\\TaskList.txt";
     }
 }

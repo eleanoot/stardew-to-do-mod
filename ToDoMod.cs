@@ -1,10 +1,8 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace ToDoMod
 {
@@ -37,7 +35,7 @@ namespace ToDoMod
         /// <summary>Open the to do list.</summary>
         private void OpenMenus()
         {
-            this.Monitor.Log($"Inside opening menu");
+            //this.Monitor.Log($"Inside opening menu");
             if (Game1.activeClickableMenu != null)
                 Game1.exitActiveMenu();
             Game1.activeClickableMenu = new ToDoList(0, this.Config, this.SaveConfig);
@@ -60,5 +58,6 @@ namespace ToDoMod
             }
 
         }
+
     }
 }
