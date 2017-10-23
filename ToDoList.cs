@@ -108,6 +108,11 @@ namespace ToDoMod
 
         }
 
+        private void loadTaskList()
+        {
+            loadedTaskNames = this.Config.SavedTasks.Cast<String>().ToList();
+        }
+
         private void pageTasks()
         {
             this.taskPages = new List<List<String>>();
@@ -120,25 +125,6 @@ namespace ToDoMod
             }
             this.currentPage = Math.Min(Math.Max(this.currentPage, 0), this.taskPages.Count - 1);
             this.TaskPage = -1;
-        }
-
-        private void loadTaskList()
-        {
-            if (!File.Exists("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt"))
-            {
-                using (FileStream fs = File.Create("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt"))
-                {
-
-                }
-            }
-            using (StreamReader sr = File.OpenText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt"))
-            {
-                string s = "";
-                while ((s = sr.ReadLine()) != null)
-                {
-                    loadedTaskNames.Add(s);
-                }
-            }
         }
 
         public override void receiveRightClick(int x, int y, bool playSound = true)
@@ -170,6 +156,9 @@ namespace ToDoMod
                     if (this.taskPages.Count > 0 && this.taskPages[this.currentPage].Count > index && this.taskPageButtons[index].containsPoint(x, y))
                     {
                         int removeIndex = this.taskPageButtons[index].myID;
+                        string textToRemove = this.taskPageButtons[index].name;
+
+                        File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", textToRemove);
 
 
                         Game1.playSound("smallSelect");
@@ -183,8 +172,13 @@ namespace ToDoMod
                         File.Delete("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt");
                         File.Move(tempFile, "C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt");
 
-                        //taskPageButtons.RemoveAt(removeIndex);
+                        
+
+
                         //loadedTaskNames.RemoveAt();
+                        //loadedTaskNames.Remove(this.taskPages[this.currentPage][System.Math.Abs(index)]);
+                        taskPageButtons.RemoveAt(removeIndex);
+
 
                         return;
                     }
