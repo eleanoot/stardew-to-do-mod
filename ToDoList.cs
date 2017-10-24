@@ -25,6 +25,8 @@ namespace ToDoMod
         /// <summary>Saving the mod settings.</summary>
         private readonly Action SaveConfig;
 
+        private ModData Data;
+
         private bool CanClose;
         private readonly ClickableComponent Title;
 
@@ -45,18 +47,19 @@ namespace ToDoMod
         ** Public methods
         *********/
 
-            /*
-        public ToDoList(int currentIndex, ModConfig config, Action saveConfig)
-            : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2,
-                   Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2,
-                   800 + IClickableMenu.borderWidth * 2,
-                   450 + IClickableMenu.borderWidth * 2,
-                   true)
-                   */
-        public ToDoList(int currentIndex, ModConfig config, Action saveConfig) : base(0, 0, 0, 0, true)
+        /*
+    public ToDoList(int currentIndex, ModConfig config, Action saveConfig)
+        : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2,
+               Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2,
+               800 + IClickableMenu.borderWidth * 2,
+               450 + IClickableMenu.borderWidth * 2,
+               true)
+               */
+        public ToDoList(int currentIndex, ModConfig config, Action saveConfig, ModData data) : base(0, 0, 0, 0, true)
         {
             this.Config = config;
             this.SaveConfig = saveConfig;
+            this.Data = data;
             this.width = Game1.tileSize * 13;
             this.height = Game1.tileSize * 9;
             Vector2 centeringOnScreen = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height, 0, 0);
@@ -99,7 +102,7 @@ namespace ToDoMod
             int num7 = 101;
             textureComponent2.myID = num7;
             this.forwardButton = textureComponent2;
-                  
+
 
 
 
@@ -110,7 +113,7 @@ namespace ToDoMod
 
         private void loadTaskList()
         {
-            loadedTaskNames = this.Config.SavedTasks.Cast<String>().ToList();
+            loadedTaskNames = this.Data.SavedTasks.Cast<String>().ToList();
         }
 
         private void pageTasks()
@@ -162,7 +165,7 @@ namespace ToDoMod
 
 
                         Game1.playSound("smallSelect");
-                  
+
 
                         var tempFile = Path.GetTempFileName();
                         var linesToKeep = File.ReadLines("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt").Where(l => l != loadedTaskNames[index]);
@@ -172,7 +175,7 @@ namespace ToDoMod
                         File.Delete("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt");
                         File.Move(tempFile, "C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt");
 
-                        
+
 
 
                         //loadedTaskNames.RemoveAt();
@@ -225,15 +228,15 @@ namespace ToDoMod
             batch.End();
 
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            
 
-            
+
+
             this.taskType.draw(batch);
 
 
 
             /* Task boxes */
-            
+
             if (this.TaskPage == -1)
             {
                 for (int index = 0; index < this.taskPageButtons.Count; ++index)
@@ -252,15 +255,15 @@ namespace ToDoMod
                     }
                 }
             }
-            
+
 
             if (this.currentPage < this.taskPages.Count - 1 && this.TaskPage == -1)
                 this.forwardButton.draw(batch);
             if (this.currentPage > 0 || this.TaskPage != -1)
                 this.backButton.draw(batch);
-            
+
             base.draw(batch);
-            
+
             Game1.mouseCursorTransparency = 1f;
             this.drawMouse(batch);
 

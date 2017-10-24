@@ -16,7 +16,7 @@ namespace ToDoMod
         private ModConfig Config;
         private ToDoList toDoList;
 
-
+        private ModData Data;
 
         /********
          ** Public methods
@@ -36,9 +36,16 @@ namespace ToDoMod
         private void OpenMenus()
         {
             //this.Monitor.Log($"Inside opening menu");
+
+            // read file
+            var model = this.Helper.ReadJsonFile<ModData>($"data/{Constants.SaveFolderName}.json") ?? new ModData();
+
+            // write file (if needed)
+            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", model);
+
             if (Game1.activeClickableMenu != null)
                 Game1.exitActiveMenu();
-            Game1.activeClickableMenu = new ToDoList(0, this.Config, this.SaveConfig);
+            Game1.activeClickableMenu = new ToDoList(0, this.Config, this.SaveConfig, model);
         }
 
         /// <summary>Update the mod's config.json file from the current <see cref="Config"/>.</summary>

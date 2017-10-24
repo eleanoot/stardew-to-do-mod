@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ToDoMod
 {
-    class ModConfig
+    class ModData
     {
-        public string OpenListKey { get; set; } = Keys.F2.ToString();
+        public StringCollection SavedTasks { get; set; } = new StringCollection();
 
     }
 }
