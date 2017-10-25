@@ -114,6 +114,12 @@ namespace ToDoMod
 
         }
 
+        private void reload()
+        {
+            loadTaskList();
+            pageTasks();
+        }
+
         private void loadTaskList()
         {
             loadedTaskNames = this.Data.SavedTasks.Cast<String>().ToList();
@@ -174,10 +180,12 @@ namespace ToDoMod
                         
                         File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
                         //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
-                        
+                        this.taskPageButtons.RemoveAt(index);
                         this.Data.SavedTasks.RemoveAt(index);
                         this.SaveData();
 
+                        
+                        Game1.activeClickableMenu = new ToDoList(0, this.Config, this.SaveConfig, this.Data, this.SaveData);
 
                         return;
                     }
@@ -265,6 +273,8 @@ namespace ToDoMod
 
 
         }
+
+        
 
         public void Entry(IModHelper helper)
         {
