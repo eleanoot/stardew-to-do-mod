@@ -27,6 +27,8 @@ namespace ToDoMod
 
         private ModData Data;
 
+        private readonly Action SaveData;
+
         private bool CanClose;
         private readonly ClickableComponent Title;
 
@@ -55,11 +57,12 @@ namespace ToDoMod
                450 + IClickableMenu.borderWidth * 2,
                true)
                */
-        public ToDoList(int currentIndex, ModConfig config, Action saveConfig, ModData data) : base(0, 0, 0, 0, true)
+        public ToDoList(int currentIndex, ModConfig config, Action saveConfig, ModData data, Action saveData) : base(0, 0, 0, 0, true)
         {
             this.Config = config;
             this.SaveConfig = saveConfig;
             this.Data = data;
+            this.SaveData = saveData;
             this.width = Game1.tileSize * 13;
             this.height = Game1.tileSize * 9;
             Vector2 centeringOnScreen = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height, 0, 0);
@@ -119,12 +122,22 @@ namespace ToDoMod
         private void pageTasks()
         {
             this.taskPages = new List<List<String>>();
+            /*
             for (int index = loadedTaskNames.Count - 1; index >= 0; --index)
             {
                 int num = loadedTaskNames.Count - 1 - index;
-                if (this.taskPages.Count <= num / 6)
+                if (this.taskPages.Count <= num / tasksPerPage)
                     this.taskPages.Add(new List<String>());
-                this.taskPages[num / 6].Add(loadedTaskNames[index]);
+                this.taskPages[num / tasksPerPage].Add(loadedTaskNames[index]);
+            }
+            */
+            for (int index = 0; index < loadedTaskNames.Count; ++index)
+            {
+                int num = index;
+                if (this.taskPages.Count <= num / tasksPerPage)
+                    this.taskPages.Add(new List<String>());
+
+                this.taskPages[num / tasksPerPage].Add(loadedTaskNames[index]);
             }
             this.currentPage = Math.Min(Math.Max(this.currentPage, 0), this.taskPages.Count - 1);
             this.TaskPage = -1;
@@ -158,29 +171,12 @@ namespace ToDoMod
                 {
                     if (this.taskPages.Count > 0 && this.taskPages[this.currentPage].Count > index && this.taskPageButtons[index].containsPoint(x, y))
                     {
-                        int removeIndex = this.taskPageButtons[index].myID;
-                        string textToRemove = this.taskPageButtons[index].name;
-
-                        File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", textToRemove);
-
-
-                        Game1.playSound("smallSelect");
-
-
-                        var tempFile = Path.GetTempFileName();
-                        var linesToKeep = File.ReadLines("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt").Where(l => l != loadedTaskNames[index]);
-
-                        File.WriteAllLines(tempFile, linesToKeep);
-
-                        File.Delete("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt");
-                        File.Move(tempFile, "C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\TaskList.txt");
-
-
-
-
-                        //loadedTaskNames.RemoveAt();
-                        //loadedTaskNames.Remove(this.taskPages[this.currentPage][System.Math.Abs(index)]);
-                        taskPageButtons.RemoveAt(removeIndex);
+                        
+                        File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
+                        //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
+                        
+                        this.Data.SavedTasks.RemoveAt(index);
+                        this.SaveData();
 
 
                         return;
