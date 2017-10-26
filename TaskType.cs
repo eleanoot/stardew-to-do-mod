@@ -12,16 +12,17 @@ namespace ToDoMod
 {
     class TaskType : IClickableMenu
     {
-        protected TextBox textBox;
+        public TextBox textBox;
         public ClickableComponent textBoxCC;
         private TextBoxEvent e;
+        public event EventHandler OkClicked;
 
         public const int region_okButton = 101;
         public const int region_doneNamingButton = 102;
         public const int region_randomButton = 103;
         public const int region_namingBox = 104;
 
-        public ClickableTextureComponent doneTypingButton;
+        public ClickableTextureComponent doneNamingButton;
 
         public bool Selected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
@@ -37,7 +38,7 @@ namespace ToDoMod
             this.textBox.Y = Game1.viewport.Height / 2 + 200;
             this.textBox.Width = 700 + IClickableMenu.borderWidth * 2;
             this.textBox.Height = Game1.tileSize * 3;
-            this.e = new TextBoxEvent(this.textBoxEnter);
+            this.e = new TextBoxEvent(this.TextBoxEnter);
             this.textBox.OnEnterPressed += this.e;
             Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.textBox;
             this.textBox.Text = "";
@@ -57,7 +58,7 @@ namespace ToDoMod
             int num5 = 104;
             textureComponent2.leftNeighborID = num5;
 
-            this.doneTypingButton = textureComponent2;
+            this.doneNamingButton = textureComponent2;
             this.textBoxCC = new ClickableComponent(new Rectangle(this.textBox.X, this.textBox.Y, this.textBox.Width, this.textBox.Height), "")
             {
                 myID = 104,
@@ -77,9 +78,12 @@ namespace ToDoMod
             base.receiveKeyPress(key);
         }
 
-        private void textBoxEnter(TextBox sender)
+        private void TextBoxEnter(TextBox sender)
         {
-            throw new NotImplementedException();
+            if (OkClicked != null)
+            {
+                OkClicked(this, null);
+            }
         }
 
         public override void receiveRightClick(int x, int y, bool playSound = true)
@@ -89,6 +93,7 @@ namespace ToDoMod
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
+            /*
             base.receiveLeftClick(x, y, playSound);
             if (textBoxCC.containsPoint(x, y))
             {
@@ -97,6 +102,12 @@ namespace ToDoMod
                 Game1.activeClickableMenu = this;
 
             }
+            else if (this.doneNamingButton.containsPoint(x, y))
+            {
+                this.TextBoxEnter(this.textBox);
+                Game1.playSound("smallSelect");
+            }
+            */
 
         }
 
@@ -106,7 +117,7 @@ namespace ToDoMod
         {
             base.draw(batch);
             this.textBox.Draw(batch);
-            this.doneTypingButton.draw(batch);
+            this.doneNamingButton.draw(batch);
         }
     }
 

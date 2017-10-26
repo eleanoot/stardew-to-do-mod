@@ -74,6 +74,7 @@ namespace ToDoMod
             this.upperRightCloseButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width - 2 * Game1.pixelZoom, this.yPositionOnScreen + 15 * Game1.pixelZoom, 12 * Game1.pixelZoom, 12 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(337, 494, 12, 12), (float)Game1.pixelZoom, false);
 
             taskType = new TaskType();
+            taskType.OkClicked += HandleOkButton;
             //Game1.activeClickableMenu = taskType;
 
             this.loadedTaskNames = new List<String>();
@@ -177,15 +178,15 @@ namespace ToDoMod
                 {
                     if (this.taskPages.Count > 0 && this.taskPages[this.currentPage].Count > index && this.taskPageButtons[index].containsPoint(x, y))
                     {
-                        
-                        File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
+
                         //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
-                        this.taskPageButtons.RemoveAt(index);
+                        //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
+                        //this.taskPageButtons.RemoveAt(index);
                         this.Data.SavedTasks.RemoveAt(index);
                         this.SaveData();
+                        this.reload();
 
-                        
-                        Game1.activeClickableMenu = new ToDoList(0, this.Config, this.SaveConfig, this.Data, this.SaveData);
+                        //Game1.activeClickableMenu = new ToDoList(0, this.Config, this.SaveConfig, this.Data, this.SaveData);
 
                         return;
                     }
@@ -195,6 +196,19 @@ namespace ToDoMod
                 else if (this.currentPage > 0 && this.backButton.containsPoint(x, y))
                 {
                     this.taskPageBackButton();
+                }
+                else if (this.taskType.textBoxCC.containsPoint(x,y))
+                {
+                    return;
+                }
+                else if (this.taskType.doneNamingButton.containsPoint(x,y))
+                {
+                    this.Data.SavedTasks.Add(taskType.textBox.Text);
+                    this.SaveData();
+                    this.taskType.textBox.Text = "";
+                    this.reload();
+                    //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", taskType.textBox.Text);
+
                 }
                 else
                 {
@@ -222,7 +236,10 @@ namespace ToDoMod
 
 
 
-
+        public void HandleOkButton(object sender, EventArgs e)
+        {
+            File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", "ok clicked");
+        }
 
 
 
@@ -274,7 +291,7 @@ namespace ToDoMod
 
         }
 
-        
+
 
         public void Entry(IModHelper helper)
         {
