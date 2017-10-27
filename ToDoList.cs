@@ -182,7 +182,17 @@ namespace ToDoMod
                         //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
                         //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
                         //this.taskPageButtons.RemoveAt(index);
-                        this.Data.SavedTasks.RemoveAt(index);
+                        int valueToRemove = 0 ;
+                        if (this.currentPage == 0)
+                        {
+                            valueToRemove = index;
+                        }
+                        else
+                        {
+                            valueToRemove = index + tasksPerPage * currentPage;
+                        }
+
+                        this.Data.SavedTasks.RemoveAt(valueToRemove);
                         this.SaveData();
                         this.reload();
 
