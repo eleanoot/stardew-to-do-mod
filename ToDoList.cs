@@ -30,6 +30,7 @@ namespace ToDoMod
         private readonly Action SaveData;
 
         private bool CanClose;
+        private bool isOpen;
         private readonly ClickableComponent Title;
 
         private TaskType taskType;
@@ -116,6 +117,8 @@ namespace ToDoMod
 
             
             pageTasks();
+
+            isOpen = true;
 
         }
 
@@ -258,13 +261,26 @@ namespace ToDoMod
             }
             if ((Game1.options.menuButton.Contains(new InputButton(key)) || key == Keys.F2) && this.readyToClose() && this.CanClose)
             {
+                isOpen = false;
                 Game1.exitActiveMenu();
                 return;
+            }
+            if ((isOpen) && (key == Keys.Enter))
+            {
+                addTask();
             }
 
             
 
             this.CanClose = true;
+        }
+
+        public void addTask()
+        {
+            this.Data.SavedTasks.Add(taskType.textBox.Text);
+            this.SaveData();
+            this.taskType.textBox.Text = "";
+            this.reload();
         }
 
 
