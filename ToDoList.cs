@@ -78,7 +78,10 @@ namespace ToDoMod
             //Game1.activeClickableMenu = taskType;
 
             this.loadedTaskNames = new List<String>();
+            loadTaskList();
+
             this.taskPageButtons = new List<ClickableComponent>();
+            int taskNameCount = 0;
             for (int index = 0; index < tasksPerPage; ++index)
             {
                 List<ClickableComponent> taskPageButtons = this.taskPageButtons;
@@ -94,6 +97,7 @@ namespace ToDoMod
                 int num4 = 1;
                 clickableComponent.fullyImmutable = num4 != 0;
                 taskPageButtons.Add(clickableComponent);
+                ++taskNameCount;
             }
 
             ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize, this.yPositionOnScreen + this.height - 12 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), (float)Game1.pixelZoom, false);
@@ -110,7 +114,7 @@ namespace ToDoMod
 
 
 
-            loadTaskList();
+            
             pageTasks();
 
         }
@@ -129,7 +133,8 @@ namespace ToDoMod
         private void pageTasks()
         {
             this.taskPages = new List<List<String>>();
-            /*
+            /* New tasks first */
+            
             for (int index = loadedTaskNames.Count - 1; index >= 0; --index)
             {
                 int num = loadedTaskNames.Count - 1 - index;
@@ -137,7 +142,10 @@ namespace ToDoMod
                     this.taskPages.Add(new List<String>());
                 this.taskPages[num / tasksPerPage].Add(loadedTaskNames[index]);
             }
-            */
+            
+            
+            /* New tasks go to end of list */
+            /*
             for (int index = 0; index < loadedTaskNames.Count; ++index)
             {
                 int num = index;
@@ -146,6 +154,8 @@ namespace ToDoMod
 
                 this.taskPages[num / tasksPerPage].Add(loadedTaskNames[index]);
             }
+            */
+
             this.currentPage = Math.Min(Math.Max(this.currentPage, 0), this.taskPages.Count - 1);
             this.TaskPage = -1;
         }
@@ -182,14 +192,25 @@ namespace ToDoMod
                         //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
                         //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.Data.SavedTasks[index]);
                         //this.taskPageButtons.RemoveAt(index);
+
+                        
+
                         int valueToRemove = 0 ;
                         if (this.currentPage == 0)
                         {
-                            valueToRemove = index;
+                            /* New tasks at end */
+                            //valueToRemove = index;
+
+                            /* New tasks first */
+                            valueToRemove = loadedTaskNames.Count - 1 - index;
                         }
                         else
                         {
-                            valueToRemove = index + tasksPerPage * currentPage;
+                            /* New tasks at end */
+                            //valueToRemove = index + tasksPerPage * currentPage;
+
+                            /* New tasks first */
+                            valueToRemove = loadedTaskNames.Count - 1 - index - (tasksPerPage * currentPage);
                         }
 
                         this.Data.SavedTasks.RemoveAt(valueToRemove);
@@ -241,6 +262,8 @@ namespace ToDoMod
                 return;
             }
 
+            
+
             this.CanClose = true;
         }
 
@@ -274,12 +297,6 @@ namespace ToDoMod
                 {
                     if (this.taskPages.Count<List<String>>() > 0 && this.taskPages[this.currentPage].Count<String>() > index)
                     {
-                        //IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom - IClickableMenu.borderWidth - 80, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 55, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 2 - 4, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
-                        //SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 20, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5 + 75, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
-
-
-                        //IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
-                        //SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize * 2 + Game1.pixelZoom, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
                         IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 4 - 20, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
                         //SpriteText.drawString(batch, this.taskPages[this.currentPage][index], this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 30, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
                         Utility.drawTextWithShadow(batch, this.taskPages[this.currentPage][index], Game1.dialogueFont, new Vector2(this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 30, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
