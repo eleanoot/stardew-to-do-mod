@@ -15,12 +15,9 @@ namespace ToDoMod
         public TextBox textBox;
         public ClickableComponent textBoxCC;
         private TextBoxEvent e;
-        public event EventHandler OkClicked;
 
-        public const int region_okButton = 101;
+        
         public const int region_doneNamingButton = 102;
-        public const int region_randomButton = 103;
-        public const int region_namingBox = 104;
 
         public ClickableTextureComponent doneNamingButton;
 
@@ -28,27 +25,21 @@ namespace ToDoMod
 
         public TaskType()
         {
-            /*this.xPositionOnScreen = Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2;
-            this.yPositionOnScreen = Game1.viewport.Height / 2 - (800 + IClickableMenu.borderWidth * 2) / 2;
-            this.width = 800 + IClickableMenu.borderWidth * 2;
-            this.height = 200 + IClickableMenu.borderWidth * 2;*/
-
             this.textBox = new TextBox((Texture2D)null, (Texture2D)null, Game1.dialogueFont, Game1.textColor);
 
+            /* Positioning stuff */
             this.textBox.Width = Game1.tileSize * 13 - (IClickableMenu.borderWidth * 2);
             this.textBox.Height = Game1.tileSize * 3;
             Vector2 centeringOnScreen = Utility.getTopLeftPositionForCenteringOnScreen(this.textBox.Width, this.textBox.Height, 0, 0);
             this.textBox.X = (int)centeringOnScreen.X - 2;
             this.textBox.Y = Game1.viewport.Height / 2 + 200;
            
-
-
-            this.e = new TextBoxEvent(this.TextBoxEnter);
             this.textBox.OnEnterPressed += this.e;
             Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.textBox;
             this.textBox.Text = "";
             this.textBox.Selected = true;
             this.textBox.limitWidth = true;
+
             ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.textBox.X + this.textBox.Width + Game1.tileSize + Game1.tileSize * 3 / 4 - Game1.pixelZoom * 2, Game1.viewport.Height / 2 + Game1.pixelZoom, Game1.tileSize, Game1.tileSize), Game1.mouseCursors, new Rectangle(381, 361, 10, 10), (float)Game1.pixelZoom, false);
             int num1 = 103;
             textureComponent1.myID = num1;
@@ -75,7 +66,9 @@ namespace ToDoMod
 
         }
 
-
+        /// <summary>
+        /// Take a key press - implemented to accept typing in the text box.
+        /// </summary>
         public override void receiveKeyPress(Keys key)
         {
             if (this.textBox.Selected || Game1.options.doesInputListContain(Game1.options.menuButton, key))
@@ -83,41 +76,18 @@ namespace ToDoMod
             base.receiveKeyPress(key);
         }
 
-        private void TextBoxEnter(TextBox sender)
-        {
-            if (OkClicked != null)
-            {
-                OkClicked(this, null);
-            }
-        }
-
+       
+        /// <summary>
+        /// Not used, but needs implementing
+        /// </summary>
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
-            throw new NotImplementedException();
+            
         }
 
-        public override void receiveLeftClick(int x, int y, bool playSound = true)
-        {
-            /*
-            base.receiveLeftClick(x, y, playSound);
-            if (textBoxCC.containsPoint(x, y))
-            {
-                //textBox.Selected = true;
-                this.textBox.SelectMe();
-                Game1.activeClickableMenu = this;
-
-            }
-            else if (this.doneNamingButton.containsPoint(x, y))
-            {
-                this.TextBoxEnter(this.textBox);
-                Game1.playSound("smallSelect");
-            }
-            */
-
-        }
-
-
-
+        /// <summary>
+        /// Draw the components to the screen.
+        /// </summary>
         public override void draw(SpriteBatch batch)
         {
             base.draw(batch);
