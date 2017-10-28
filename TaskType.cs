@@ -34,10 +34,15 @@ namespace ToDoMod
             this.height = 200 + IClickableMenu.borderWidth * 2;*/
 
             this.textBox = new TextBox((Texture2D)null, (Texture2D)null, Game1.dialogueFont, Game1.textColor);
-            this.textBox.X = Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2 + Game1.tileSize;
-            this.textBox.Y = Game1.viewport.Height / 2 + 200;
-            this.textBox.Width = 700 + IClickableMenu.borderWidth * 2;
+
+            this.textBox.Width = Game1.tileSize * 13 - (IClickableMenu.borderWidth * 2);
             this.textBox.Height = Game1.tileSize * 3;
+            Vector2 centeringOnScreen = Utility.getTopLeftPositionForCenteringOnScreen(this.textBox.Width, this.textBox.Height, 0, 0);
+            this.textBox.X = (int)centeringOnScreen.X - 2;
+            this.textBox.Y = Game1.viewport.Height / 2 + 200;
+           
+
+
             this.e = new TextBoxEvent(this.TextBoxEnter);
             this.textBox.OnEnterPressed += this.e;
             Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.textBox;
