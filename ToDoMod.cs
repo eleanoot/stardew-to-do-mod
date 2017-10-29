@@ -4,6 +4,8 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
 
+using Microsoft.Xna.Framework.Input;
+
 namespace ToDoMod
 {
     /// <summary>The mod entry point.</summary>
@@ -32,6 +34,16 @@ namespace ToDoMod
         {
             this.Config = helper.ReadConfig<ModConfig>();
             ControlEvents.KeyPressed += this.ControlEvents_KeyPress;
+            
+            /* Check if the set config key is valid i.e. won't close the menu when typing in the box! */
+            /* Checks for single characters: any single letter, any single number, other likely typed characters */
+            if (System.Text.RegularExpressions.Regex.IsMatch(this.Config.OpenListKey, @"^[a-zA-Z0-9-+=,./?*]$"))
+            {
+                this.Config.OpenListKey = Keys.F2.ToString();
+                this.SaveConfig();
+                this.Monitor.Log($"Set open menu key invalid, would prevent typing in textbox.", LogLevel.Warn);
+                this.Monitor.Log($"Open menu key set to default of F2.", LogLevel.Warn);
+            }
         }
 
         /********
