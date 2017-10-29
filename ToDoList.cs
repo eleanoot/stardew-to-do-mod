@@ -371,8 +371,11 @@ namespace ToDoMod
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             
             this.taskType.draw(batch);
-            
+
             /* Task boxes on this page. */
+
+            Vector2 centeringInTaskBox = Utility.getTopLeftPositionForCenteringOnScreen(this.taskPageButtons[0].bounds.X, this.taskPageButtons[0].bounds.Y, 0, 0); 
+            
             if (this.TaskPage == -1)
             {
                 for (int index = 0; index < this.taskPageButtons.Count; ++index)
@@ -380,7 +383,15 @@ namespace ToDoMod
                     if (this.taskPages.Count<List<String>>() > 0 && this.taskPages[this.currentPage].Count<String>() > index)
                     {
                         IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 4 - 20, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
-                        Utility.drawTextWithShadow(batch, this.taskPages[this.currentPage][index], this.listFont, new Vector2(this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 50, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
+                        if (this.Config.UseLargerFont)
+                        {
+                            Utility.drawTextWithShadow(batch, this.taskPages[this.currentPage][index], this.listFont, new Vector2(this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 50, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
+                        }
+                        else
+                        {
+                            Utility.drawTextWithShadow(batch, this.taskPages[this.currentPage][index], this.listFont, new Vector2(this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 50, this.taskPageButtons[index].bounds.Y + (this.listFont.MeasureString(this.taskPages[this.currentPage][index]).Y / 2 + Game1.tileSize / 4)), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
+                        }
+
                     }
                 }
             }
