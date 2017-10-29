@@ -341,6 +341,77 @@ namespace ToDoMod
             
         }
 
+        public override void receiveGamePadButton(Buttons key)
+        {
+            if (key == Buttons.A && this.TaskPage == -1)
+            {
+                for (int index = 0; index < this.taskPageButtons.Count; ++index)
+                {
+                    if (this.taskPages.Count > 0 && this.taskPages[this.currentPage].Count > index && this.taskPageButtons[index].containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                    {
+                        int valueToRemove = 0;
+                        /* If we're on the very first page - task indexes match loaded list easier... */
+                        if (this.currentPage == 0)
+                        {
+                            /* Debug - if new tasks at end */
+                            //valueToRemove = index;
+
+                            valueToRemove = loadedTaskNames.Count - 1 - index;
+                        }
+                        /* If we're on any other page */
+                        else
+                        {
+                            /* Debug - New tasks at end */
+                            //valueToRemove = index + tasksPerPage * currentPage;
+
+                            valueToRemove = loadedTaskNames.Count - 1 - index - (tasksPerPage * currentPage);
+                        }
+
+                        /* Remove the task at the calculated index and save the updated list to the config file. */
+                        this.Data.SavedTasks.RemoveAt(valueToRemove);
+                        this.SaveData();
+                        /* Reload the list to display the updated one. */
+                        this.reload();
+
+                        return;
+                    }
+                }
+
+                if (this.taskType.doneNamingButton.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                {
+                    addTask();
+                }
+                /* If we clicked on the forward button, move the page forwards */
+                else if (this.currentPage < this.taskPages.Count - 1 && this.forwardButton.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                    this.taskPageForwardButton();
+                /* If we clicked on the back button, move the page back. */
+                else if (this.currentPage > 0 && this.backButton.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                {
+                    this.taskPageBackButton();
+                }
+                /* In case someone selects the text box */
+                else if (this.taskType.textBoxCC.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                {
+                    return;
+                }
+                else
+                {
+                    Game1.playSound("bigDeSelect");
+                    this.exitThisMenu(true);
+                }
+            }
+
+            if ((key == Buttons.LeftShoulder) && this.currentPage > 0)
+            {
+                this.taskPageBackButton();
+            }
+
+            if ((key == Buttons.RightShoulder && this.currentPage < this.taskPages.Count - 1))
+            {
+                this.taskPageForwardButton();
+            }
+        }
+
         /// <summary>
         /// Add the description typed into the text box as a clickable task on the to do list.
         /// </summary>

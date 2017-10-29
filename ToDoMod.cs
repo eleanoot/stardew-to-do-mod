@@ -34,7 +34,8 @@ namespace ToDoMod
         {
             this.Config = helper.ReadConfig<ModConfig>() ?? new ModConfig();
             ControlEvents.KeyPressed += this.ControlEvents_KeyPress;
-            
+            ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
+
             /* Check if the set config key is valid i.e. won't close the menu when typing in the box! */
             /* Checks for single characters: any single letter, any single number, other likely typed characters */
             if (System.Text.RegularExpressions.Regex.IsMatch(this.Config.OpenListKey, @"^[a-zA-Z0-9-+=,./?*]$"))
@@ -77,15 +78,28 @@ namespace ToDoMod
                 if (e.KeyPressed.ToString() == this.Config.OpenListKey)
                 {
                     /* If so open the to do list. */
-                    this.OpenMenus();
+                    this.OpenList();
                 }
             }
         }
 
         /// <summary>
+        /// Check for if the controller button pressed is the one bound to this menu.
+        /// </summary>
+        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
+        {
+            if ((Context.IsWorldReady) && (Context.IsPlayerFree))
+            {
+                if (e.ButtonPressed.ToString() == this.Config.OpenListKey)
+                    this.OpenList();
+            }
+           
+        }
+
+        /// <summary>
         /// Open the to do list.
         /// </summary>
-        private void OpenMenus()
+        private void OpenList()
         {
             /* Read in the specific saved task list for the opened save file */
             /* Or create one if it doesn't exist yet. */
