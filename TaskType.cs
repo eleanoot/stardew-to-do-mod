@@ -23,9 +23,9 @@ namespace ToDoMod
 
         public bool Selected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public TaskType()
+        public TaskType(SpriteFont fontToUse)
         {
-            this.textBox = new TextBox((Texture2D)null, (Texture2D)null, Game1.dialogueFont, Game1.textColor);
+            this.textBox = new TextBox((Texture2D)null, (Texture2D)null, fontToUse, Game1.textColor);
 
             /* Positioning stuff */
             this.textBox.Width = Game1.tileSize * 13 - (IClickableMenu.borderWidth * 2);

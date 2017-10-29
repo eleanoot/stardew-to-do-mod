@@ -32,7 +32,7 @@ namespace ToDoMod
         /// </summary>
         public override void Entry(IModHelper helper)
         {
-            this.Config = helper.ReadConfig<ModConfig>();
+            this.Config = helper.ReadConfig<ModConfig>() ?? new ModConfig();
             ControlEvents.KeyPressed += this.ControlEvents_KeyPress;
             
             /* Check if the set config key is valid i.e. won't close the menu when typing in the box! */

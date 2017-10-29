@@ -51,6 +51,11 @@ namespace ToDoMod
         /// </summary>
         private TaskType taskType;
 
+        /// <summary>
+        /// The font to use for the text box and list - depends on whether user chose to use larger font or not.
+        /// </summary>
+        private SpriteFont listFont;
+
         
 
         /// <summary>
@@ -78,6 +83,7 @@ namespace ToDoMod
         public ClickableTextureComponent backButton;
         private int TaskPage = -1;
         public const int tasksPerPage = 5;
+        
 
         /*********
         ** Public methods
@@ -101,8 +107,18 @@ namespace ToDoMod
             /* Close button */
             this.upperRightCloseButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width - 2 * Game1.pixelZoom, this.yPositionOnScreen + 15 * Game1.pixelZoom, 12 * Game1.pixelZoom, 12 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(337, 494, 12, 12), (float)Game1.pixelZoom, false);
 
+            /* Determine the font to use from the config file. */
+            if (this.Config.UseLargerFont)
+            {
+                this.listFont = Game1.dialogueFont;
+            }
+            else
+            {
+                this.listFont = Game1.smallFont;
+            }
+
             /* Create the text box and its confirmation button */
-            taskType = new TaskType();
+            taskType = new TaskType(this.listFont);
             
             /* Load in the saved tasks */
             this.loadedTaskNames = new List<String>();
@@ -126,6 +142,7 @@ namespace ToDoMod
                 clickableComponent.leftNeighborID = num3;
                 int num4 = 1;
                 clickableComponent.fullyImmutable = num4 != 0;
+
                 taskPageButtons.Add(clickableComponent);
                 ++taskNameCount;
             }
@@ -341,7 +358,8 @@ namespace ToDoMod
             }
             
         }
-        
+
+
         /// <summary>
         /// Draw the to do list components. 
         /// </summary>
@@ -362,7 +380,7 @@ namespace ToDoMod
                     if (this.taskPages.Count<List<String>>() > 0 && this.taskPages[this.currentPage].Count<String>() > index)
                     {
                         IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 4 - 20, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
-                        Utility.drawTextWithShadow(batch, this.taskPages[this.currentPage][index], Game1.dialogueFont, new Vector2(this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 50, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
+                        Utility.drawTextWithShadow(batch, this.taskPages[this.currentPage][index], this.listFont, new Vector2(this.taskPageButtons[index].bounds.X + Game1.tileSize + Game1.pixelZoom - 50, this.taskPageButtons[index].bounds.Y + Game1.pixelZoom * 5), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
                     }
                 }
             }
@@ -375,7 +393,7 @@ namespace ToDoMod
 
             base.draw(batch);
 
-            Game1.mouseCursorTransparency = 1f;
+           Game1.mouseCursorTransparency = 1f;
             this.drawMouse(batch);
 
 
