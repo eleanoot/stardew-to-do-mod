@@ -164,8 +164,52 @@ namespace ToDoMod
 
             /* The to do list is open for business */
             isOpen = true;
-            
 
+            if (!Game1.options.SnappyMenus)
+                return;
+            this.populateClickableComponentList();
+            this.snapToDefaultClickableComponent();
+
+
+        }
+
+        protected override void customSnapBehavior(int direction, int oldRegion, int oldID)
+        {
+            if (oldID >= 0 && oldID < tasksPerPage && this.TaskPage == -1)
+            {
+                if (direction == 2)
+                {
+                    if (oldID < tasksPerPage - 1 && this.taskPages[this.currentPage].Count - 1 > oldID)
+                        this.currentlySnappedComponent = this.getComponentWithID(oldID + 1);
+                }
+                else if (direction == 1)
+                {
+                    if (this.currentPage < this.taskPages.Count - 1)
+                    {
+                        this.currentlySnappedComponent = this.getComponentWithID(101);
+                        this.currentlySnappedComponent.leftNeighborID = oldID;
+                    }
+                }
+                else if (direction == 3 && this.currentPage > 0)
+                {
+                    this.currentlySnappedComponent = this.getComponentWithID(102);
+                    this.currentlySnappedComponent.rightNeighborID = oldID;
+                }
+            }
+            else if (oldID == 102)
+            {
+                if (this.TaskPage != -1)
+                    return;
+                this.currentlySnappedComponent = this.getComponentWithID(0);
+            }
+
+            this.snapCursorToCurrentSnappedComponent();
+        }
+
+        public override void snapToDefaultClickableComponent()
+        {
+            this.currentlySnappedComponent = this.getComponentWithID(0);
+            this.snapCursorToCurrentSnappedComponent();
         }
 
         /// <summary>
@@ -232,6 +276,10 @@ namespace ToDoMod
         {
             this.currentPage = this.currentPage + 1;
             Game1.playSound("shwip");
+            if (!Game1.options.SnappyMenus || this.currentPage != this.taskPages.Count - 1)
+                return;
+            this.currentlySnappedComponent = this.getComponentWithID(0);
+            this.snapCursorToCurrentSnappedComponent();
         }
 
         /// <summary>
@@ -241,6 +289,10 @@ namespace ToDoMod
         {
             this.currentPage = this.currentPage - 1;
             Game1.playSound("shwip");
+            if (!Game1.options.SnappyMenus || this.currentPage != 0)
+                return;
+            this.currentlySnappedComponent = this.getComponentWithID(0);
+            this.snapCursorToCurrentSnappedComponent();
         }
 
         /// <summary>
@@ -280,7 +332,9 @@ namespace ToDoMod
                         this.SaveData();
                         /* Reload the list to display the updated one. */
                         this.reload();
+
                         
+
                         return;
                     }
                 }
@@ -343,63 +397,10 @@ namespace ToDoMod
 
         public override void receiveGamePadButton(Buttons key)
         {
-            if (key == Buttons.A && this.TaskPage == -1)
-            {
-                for (int index = 0; index < this.taskPageButtons.Count; ++index)
-                {
-                    if (this.taskPages.Count > 0 && this.taskPages[this.currentPage].Count > index && this.taskPageButtons[index].containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                    {
-                        int valueToRemove = 0;
-                        /* If we're on the very first page - task indexes match loaded list easier... */
-                        if (this.currentPage == 0)
-                        {
-                            /* Debug - if new tasks at end */
-                            //valueToRemove = index;
 
-                            valueToRemove = loadedTaskNames.Count - 1 - index;
-                        }
-                        /* If we're on any other page */
-                        else
-                        {
-                            /* Debug - New tasks at end */
-                            //valueToRemove = index + tasksPerPage * currentPage;
+            
 
-                            valueToRemove = loadedTaskNames.Count - 1 - index - (tasksPerPage * currentPage);
-                        }
-
-                        /* Remove the task at the calculated index and save the updated list to the config file. */
-                        this.Data.SavedTasks.RemoveAt(valueToRemove);
-                        this.SaveData();
-                        /* Reload the list to display the updated one. */
-                        this.reload();
-
-                        return;
-                    }
-                }
-
-                if (this.taskType.doneNamingButton.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                {
-                    addTask();
-                }
-                /* If we clicked on the forward button, move the page forwards */
-                else if (this.currentPage < this.taskPages.Count - 1 && this.forwardButton.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                    this.taskPageForwardButton();
-                /* If we clicked on the back button, move the page back. */
-                else if (this.currentPage > 0 && this.backButton.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                {
-                    this.taskPageBackButton();
-                }
-                /* In case someone selects the text box */
-                else if (this.taskType.textBoxCC.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                {
-                    return;
-                }
-                else
-                {
-                    Game1.playSound("bigDeSelect");
-                    this.exitThisMenu(true);
-                }
-            }
+                
 
             if ((key == Buttons.LeftShoulder) && this.currentPage > 0)
             {
