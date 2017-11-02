@@ -133,6 +133,7 @@ namespace ToDoMod
                 List<ClickableComponent> taskPageButtons = this.taskPageButtons;
                 ClickableComponent clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen + Game1.tileSize / 4 + index * ((this.height - Game1.tileSize / 2) / 6) + (this.height - Game1.tileSize) / 6 + Game1.pixelZoom - 12, this.width - Game1.tileSize / 2, (this.height - Game1.tileSize / 2) / 6 + Game1.pixelZoom), string.Concat((object)index));
                 clickableComponent.myID = index;
+                
                 clickableComponent.downNeighborID = -7777;
                 int num1 = index > 0 ? index - 1 : -1;
                 clickableComponent.upNeighborID = num1;
@@ -164,48 +165,24 @@ namespace ToDoMod
 
             /* The to do list is open for business */
             isOpen = true;
-
+            
             if (!Game1.options.SnappyMenus)
                 return;
+                
             this.populateClickableComponentList();
+            for (int i=0; i<tasksPerPage; ++i)
+            {
+                this.allClickableComponents.Add(taskPageButtons[i]);
+            }
+            this.allClickableComponents.Add(taskType.doneNamingButton);
+            
+
             this.snapToDefaultClickableComponent();
 
+            
 
         }
-
-        protected override void customSnapBehavior(int direction, int oldRegion, int oldID)
-        {
-            if (oldID >= 0 && oldID < tasksPerPage && this.TaskPage == -1)
-            {
-                if (direction == 2)
-                {
-                    if (oldID < tasksPerPage - 1 && this.taskPages[this.currentPage].Count - 1 > oldID)
-                        this.currentlySnappedComponent = this.getComponentWithID(oldID + 1);
-                }
-                else if (direction == 1)
-                {
-                    if (this.currentPage < this.taskPages.Count - 1)
-                    {
-                        this.currentlySnappedComponent = this.getComponentWithID(101);
-                        this.currentlySnappedComponent.leftNeighborID = oldID;
-                    }
-                }
-                else if (direction == 3 && this.currentPage > 0)
-                {
-                    this.currentlySnappedComponent = this.getComponentWithID(102);
-                    this.currentlySnappedComponent.rightNeighborID = oldID;
-                }
-            }
-            else if (oldID == 102)
-            {
-                if (this.TaskPage != -1)
-                    return;
-                this.currentlySnappedComponent = this.getComponentWithID(0);
-            }
-
-            this.snapCursorToCurrentSnappedComponent();
-        }
-
+        
         public override void snapToDefaultClickableComponent()
         {
             this.currentlySnappedComponent = this.getComponentWithID(0);
@@ -397,11 +374,7 @@ namespace ToDoMod
 
         public override void receiveGamePadButton(Buttons key)
         {
-
             
-
-                
-
             if ((key == Buttons.LeftShoulder) && this.currentPage > 0)
             {
                 this.taskPageBackButton();
@@ -410,6 +383,60 @@ namespace ToDoMod
             if ((key == Buttons.RightShoulder && this.currentPage < this.taskPages.Count - 1))
             {
                 this.taskPageForwardButton();
+            }
+
+            if (Game1.options.SnappyMenus)
+            {
+                int oldID = this.currentlySnappedComponent.myID;
+                if ((key == Buttons.LeftThumbstickDown) || (key == Buttons.LeftThumbstickUp))
+                {
+
+                    if (key == Buttons.LeftThumbstickDown)
+                    {
+                        if (oldID == this.upperRightCloseButton.myID)
+                        {
+                            snapToDefaultClickableComponent();
+                        }
+                    }
+                    else if (key == Buttons.LeftThumbstickUp)
+                    {
+                        if (oldID == taskType.doneNamingButton.myID)
+                        {
+                            this.currentlySnappedComponent = this.getComponentWithID(tasksPerPage - 1);
+                        }
+                    }
+                   
+
+                    if (oldID >= 0 && oldID < tasksPerPage && this.TaskPage == -1)
+                    {
+                        if (key == Buttons.LeftThumbstickDown)
+                        {
+                            
+                            if (oldID < tasksPerPage - 1 && this.taskPages[this.currentPage].Count - 1 > oldID)
+                                this.currentlySnappedComponent = this.getComponentWithID(oldID + 1);
+                            else if (oldID == tasksPerPage - 1)
+                            {
+                                this.currentlySnappedComponent = this.getComponentWithID(taskType.doneNamingButton.myID);
+                            }
+                            
+                        }
+                        else if (key == Buttons.LeftThumbstickUp)
+                        {
+                            if (oldID > 0)
+                            {
+                                this.currentlySnappedComponent = this.getComponentWithID(oldID - 1);
+                            }
+                            else if (oldID == 0)
+                            {
+                                this.currentlySnappedComponent = this.getComponentWithID(upperRightCloseButton.myID);
+                            }
+                            
+                        }
+
+                    }
+
+                    this.snapCursorToCurrentSnappedComponent();
+                }
             }
         }
 

@@ -17,7 +17,7 @@ namespace ToDoMod
         private TextBoxEvent e;
 
         
-        public const int region_doneNamingButton = 102;
+        public const int region_doneNamingButton = 202;
 
         public ClickableTextureComponent doneNamingButton;
 
@@ -41,27 +41,26 @@ namespace ToDoMod
             this.textBox.limitWidth = true;
 
             ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.textBox.X + this.textBox.Width + Game1.tileSize + Game1.tileSize * 3 / 4 - Game1.pixelZoom * 2, Game1.viewport.Height / 2 + Game1.pixelZoom, Game1.tileSize, Game1.tileSize), Game1.mouseCursors, new Rectangle(381, 361, 10, 10), (float)Game1.pixelZoom, false);
-            int num1 = 103;
+            int num1 = 203;
             textureComponent1.myID = num1;
-            int num2 = 102;
+            int num2 = 202;
             textureComponent1.leftNeighborID = num2;
 
             ClickableTextureComponent textureComponent2 = new ClickableTextureComponent(new Rectangle(this.textBox.X + this.textBox.Width + Game1.tileSize / 2 + Game1.pixelZoom, Game1.viewport.Height / 2 - Game1.pixelZoom * 2 + 200, Game1.tileSize, Game1.tileSize), Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1), 1f, false);
-            int num3 = 102;
+            int num3 = 202;
             textureComponent2.myID = num3;
-            int num4 = 103;
+            int num4 = 203;
             textureComponent2.rightNeighborID = num4;
-            int num5 = 104;
+            int num5 = 204;
             textureComponent2.leftNeighborID = num5;
 
             this.doneNamingButton = textureComponent2;
             this.textBoxCC = new ClickableComponent(new Rectangle(this.textBox.X, this.textBox.Y, this.textBox.Width, this.textBox.Height), "")
             {
-                myID = 104,
-                rightNeighborID = 102
+                myID = 204,
+                rightNeighborID = 202
             };
-            this.populateClickableComponentList();
-            this.snapToDefaultClickableComponent();
+            
 
 
         }
