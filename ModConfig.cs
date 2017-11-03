@@ -15,10 +15,13 @@ namespace ToDoMod
 
         public bool UseLargerFont { get; set; }
 
+        public bool OpenAtStartup { get; set; }
+
         public ModConfig()
         {
             this.OpenListKey = Keys.F2.ToString();
             this.UseLargerFont = false;
+            this.OpenAtStartup = false;
         }
 
     }

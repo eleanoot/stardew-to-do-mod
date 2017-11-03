@@ -35,6 +35,7 @@ namespace ToDoMod
             this.Config = helper.ReadConfig<ModConfig>() ?? new ModConfig();
             ControlEvents.KeyPressed += this.ControlEvents_KeyPress;
             ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
 
             /* Check if the set config key is valid i.e. won't close the menu when typing in the box! */
             /* Checks for single characters: any single letter, any single number, other likely typed characters */
@@ -94,6 +95,18 @@ namespace ToDoMod
                     this.OpenList();
             }
            
+        }
+
+        /// <summary>The method called after the player loads their save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        public void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+            /* If the user wants the list to load at game start, do that */
+            if (this.Config.OpenAtStartup)
+            {
+                this.OpenList();
+            }
         }
 
         /// <summary>

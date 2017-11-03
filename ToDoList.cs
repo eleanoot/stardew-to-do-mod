@@ -414,7 +414,7 @@ namespace ToDoMod
                             
                             if (oldID < tasksPerPage - 1 && this.taskPages[this.currentPage].Count - 1 > oldID)
                                 this.currentlySnappedComponent = this.getComponentWithID(oldID + 1);
-                            else if (oldID == tasksPerPage - 1)
+                            else
                             {
                                 this.currentlySnappedComponent = this.getComponentWithID(taskType.doneNamingButton.myID);
                             }
