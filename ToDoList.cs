@@ -408,6 +408,7 @@ namespace ToDoMod
                 else
                 {
 
+                    /* Jumping from tasks to close/done button */
                    if (key == Buttons.LeftThumbstickDown)
                    {
                        if (oldID == this.upperRightCloseButton.myID)
@@ -423,7 +424,7 @@ namespace ToDoMod
                        }
                    }
 
-
+                   /* Jumping between tasks */
                    if (oldID >= 0 && oldID < tasksPerPage && this.TaskPage == -1)
                    {
                        if (key == Buttons.LeftThumbstickDown)

@@ -1,4 +1,0 @@
-four
-three
-two
-remove
