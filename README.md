@@ -1,6 +1,6 @@
 **To Do List** is a [Stardew Valley](http://stardewvalley.net/) mod that adds a menu allowing you to type small reminders for tasks you want to complete. 
 
-![](screenshots/usage.gif)
+![](Screenshots/usage.gif)
 
 ## Contents
 * [Install](#install)
