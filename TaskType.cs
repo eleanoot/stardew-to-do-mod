@@ -15,21 +15,19 @@ namespace ToDoMod
         public TextBox textBox;
         public ClickableComponent textBoxCC;
         private TextBoxEvent e;
-
         
         public const int region_doneNamingButton = 202;
 
         public ClickableTextureComponent doneNamingButton;
 
-        public bool Selected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public TaskType(SpriteFont fontToUse)
         {
-            this.textBox = new TextBox((Texture2D)null, (Texture2D)null, fontToUse, Game1.textColor);
-
-            /* Positioning stuff */
-            this.textBox.Width = Game1.tileSize * 13 - (IClickableMenu.borderWidth * 2);
-            this.textBox.Height = Game1.tileSize * 3;
+            this.textBox = new TextBox((Texture2D)null, (Texture2D)null, fontToUse, Game1.textColor)
+            {
+                /* Positioning stuff */
+                Width = Game1.tileSize * 13 - (IClickableMenu.borderWidth * 2),
+                Height = Game1.tileSize * 3
+            };
             Vector2 centeringOnScreen = Utility.getTopLeftPositionForCenteringOnScreen(this.textBox.Width, this.textBox.Height, 0, 0);
             this.textBox.X = (int)centeringOnScreen.X - 2;
             this.textBox.Y = Game1.viewport.Height / 2 + 200;
@@ -75,14 +73,6 @@ namespace ToDoMod
             base.receiveKeyPress(key);
         }
 
-       
-        /// <summary>
-        /// Not used, but needs implementing
-        /// </summary>
-        public override void receiveRightClick(int x, int y, bool playSound = true)
-        {
-            
-        }
 
         /// <summary>
         /// Draw the components to the screen.
@@ -92,6 +82,16 @@ namespace ToDoMod
             base.draw(batch);
             this.textBox.Draw(batch);
             this.doneNamingButton.draw(batch);
+        }
+
+        public bool Selected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Not used, but needs implementing
+        /// </summary>
+        public override void receiveRightClick(int x, int y, bool playSound = true)
+        {
+
         }
     }
 

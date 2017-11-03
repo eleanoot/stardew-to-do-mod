@@ -5,7 +5,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -55,9 +54,7 @@ namespace ToDoMod
         /// The font to use for the text box and list - depends on whether user chose to use larger font or not.
         /// </summary>
         private SpriteFont listFont;
-
         
-
         /// <summary>
         /// All of the pages and their included tasks.
         /// </summary>
@@ -122,7 +119,7 @@ namespace ToDoMod
             
             /* Load in the saved tasks */
             this.loadedTaskNames = new List<String>();
-            loadTaskList();
+            LoadTaskList();
 
             /* Create the clickable task buttons on the list */
             this.taskPageButtons = new List<ClickableComponent>();
@@ -131,10 +128,11 @@ namespace ToDoMod
             for (int index = 0; index < tasksPerPage; ++index)
             {
                 List<ClickableComponent> taskPageButtons = this.taskPageButtons;
-                ClickableComponent clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen + Game1.tileSize / 4 + index * ((this.height - Game1.tileSize / 2) / 6) + (this.height - Game1.tileSize) / 6 + Game1.pixelZoom - 12, this.width - Game1.tileSize / 2, (this.height - Game1.tileSize / 2) / 6 + Game1.pixelZoom), string.Concat((object)index));
-                clickableComponent.myID = index;
-                
-                clickableComponent.downNeighborID = -7777;
+                ClickableComponent clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen + Game1.tileSize / 4 + index * ((this.height - Game1.tileSize / 2) / 6) + (this.height - Game1.tileSize) / 6 + Game1.pixelZoom - 12, this.width - Game1.tileSize / 2, (this.height - Game1.tileSize / 2) / 6 + Game1.pixelZoom), string.Concat((object)index))
+                {
+                    myID = index,
+                    downNeighborID = -7777
+                };
                 int num1 = index > 0 ? index - 1 : -1;
                 clickableComponent.upNeighborID = num1;
                 int num2 = -7777;
@@ -161,47 +159,57 @@ namespace ToDoMod
             this.forwardButton = textureComponent2;
             
             /* Split the tasks into pages */
-            pageTasks();
+            PageTasks();
 
             /* The to do list is open for business */
             isOpen = true;
             
+            /* If we're not using a controller or snappy menus, we're done */
             if (!Game1.options.SnappyMenus)
                 return;
                 
+            /* Add the clickable components to be able to snap to them */
             this.populateClickableComponentList();
             for (int i=0; i<tasksPerPage; ++i)
             {
                 this.allClickableComponents.Add(taskPageButtons[i]);
             }
             this.allClickableComponents.Add(taskType.doneNamingButton);
-            
-
             this.snapToDefaultClickableComponent();
 
-            
-
+            //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.taskPages[currentPage].Count.ToString());
         }
         
+        /// <summary>
+        /// Snap the cursor to the top of the clickable tasks.
+        /// </summary>
         public override void snapToDefaultClickableComponent()
         {
-            this.currentlySnappedComponent = this.getComponentWithID(0);
+            if (taskPages.Any())
+            {
+                this.currentlySnappedComponent = this.getComponentWithID(0);
+            }
+            else
+            {
+                this.currentlySnappedComponent = this.getComponentWithID(this.taskType.doneNamingButton.myID);
+            }
+            
             this.snapCursorToCurrentSnappedComponent();
         }
 
         /// <summary>
         /// Reload the current task list into the correct buttons and pages after a change.
         /// </summary>
-        private void reload()
+        private void Reload()
         {
-            loadTaskList();
-            pageTasks();
+            LoadTaskList();
+            PageTasks();
         }
 
         /// <summary>
         /// Load the full list of saved tasks from the config file.
         /// </summary>
-        private void loadTaskList()
+        private void LoadTaskList()
         {
             loadedTaskNames = this.Data.SavedTasks.Cast<String>().ToList();
         }
@@ -209,7 +217,7 @@ namespace ToDoMod
         /// <summary>
         /// Split the loaded tasks across multiple pages.
         /// </summary>
-        private void pageTasks()
+        private void PageTasks()
         {
             this.taskPages = new List<List<String>>();
             
@@ -240,16 +248,10 @@ namespace ToDoMod
             this.TaskPage = -1;
         }
 
-        /* Not used but needs implementing */
-        public override void receiveRightClick(int x, int y, bool playSound = true)
-        {
-
-        }
-
         /// <summary>
         /// Move the list of tasks forward one page.
         /// </summary>
-        private void taskPageForwardButton()
+        private void TaskPageForwardButton()
         {
             this.currentPage = this.currentPage + 1;
             Game1.playSound("shwip");
@@ -262,7 +264,7 @@ namespace ToDoMod
         /// <summary>
         /// Move the list of tasks backward one page.
         /// </summary>
-        private void taskPageBackButton()
+        private void TaskPageBackButton()
         {
             this.currentPage = this.currentPage - 1;
             Game1.playSound("shwip");
@@ -308,21 +310,18 @@ namespace ToDoMod
                         this.Data.SavedTasks.RemoveAt(valueToRemove);
                         this.SaveData();
                         /* Reload the list to display the updated one. */
-                        this.reload();
-
-                        
-
+                        this.Reload();
                         return;
                     }
                 }
 
                 /* If we clicked on the forward button, move the page forwards */
                 if (this.currentPage < this.taskPages.Count - 1 && this.forwardButton.containsPoint(x, y))
-                    this.taskPageForwardButton();
+                    this.TaskPageForwardButton();
                 /* If we clicked on the back button, move the page back. */
                 else if (this.currentPage > 0 && this.backButton.containsPoint(x, y))
                 {
-                    this.taskPageBackButton();
+                    this.TaskPageBackButton();
                 }
                 /* In case someone selects the text box */
                 else if (this.taskType.textBoxCC.containsPoint(x,y))
@@ -332,8 +331,7 @@ namespace ToDoMod
                 /* If we clicked the ok button */
                 else if (this.taskType.doneNamingButton.containsPoint(x,y))
                 {
-                    addTask();
-
+                    AddTask();
                 }
                 /* Must have clicked off the menu - close it */
                 else
@@ -341,7 +339,6 @@ namespace ToDoMod
                     Game1.playSound("bigDeSelect");
                     this.exitThisMenu(true);
                 }
-
             }
         }
 
@@ -361,7 +358,7 @@ namespace ToDoMod
             /* If the to do list is open and we've hit enter */
             else if ((isOpen) && (key == Keys.Enter))
             {
-                addTask();
+                AddTask();
             }
             /* We've hit anything else, so ignore it for typing and opening the menu. */
             else
@@ -372,80 +369,99 @@ namespace ToDoMod
             
         }
 
+        /// <summary>
+        /// Take a button press to navigate the menu.
+        /// </summary>
         public override void receiveGamePadButton(Buttons key)
         {
-            
+
+            /* Move back and forth between the pages with the shoulder buttons */
             if ((key == Buttons.LeftShoulder) && this.currentPage > 0)
             {
-                this.taskPageBackButton();
+                this.TaskPageBackButton();
             }
 
             if ((key == Buttons.RightShoulder && this.currentPage < this.taskPages.Count - 1))
             {
-                this.taskPageForwardButton();
+                this.TaskPageForwardButton();
             }
 
-            if (Game1.options.SnappyMenus)
-            {
-                int oldID = this.currentlySnappedComponent.myID;
-                if ((key == Buttons.LeftThumbstickDown) || (key == Buttons.LeftThumbstickUp))
-                {
+            
 
+           if (Game1.options.SnappyMenus)
+           {
+               int oldID = this.currentlySnappedComponent.myID;
+
+                /* When there's no tasks in the list */
+                if (!this.taskPages.Any())
+                {
                     if (key == Buttons.LeftThumbstickDown)
                     {
-                        if (oldID == this.upperRightCloseButton.myID)
-                        {
-                            snapToDefaultClickableComponent();
-                        }
+                        snapToDefaultClickableComponent();
                     }
                     else if (key == Buttons.LeftThumbstickUp)
                     {
-                        if (oldID == taskType.doneNamingButton.myID)
-                        {
-                            this.currentlySnappedComponent = this.getComponentWithID(tasksPerPage - 1);
-                        }
+                        this.currentlySnappedComponent = this.getComponentWithID(this.upperRightCloseButton.myID);
                     }
-                   
-
-                    if (oldID >= 0 && oldID < tasksPerPage && this.TaskPage == -1)
-                    {
-                        if (key == Buttons.LeftThumbstickDown)
-                        {
-                            
-                            if (oldID < tasksPerPage - 1 && this.taskPages[this.currentPage].Count - 1 > oldID)
-                                this.currentlySnappedComponent = this.getComponentWithID(oldID + 1);
-                            else
-                            {
-                                this.currentlySnappedComponent = this.getComponentWithID(taskType.doneNamingButton.myID);
-                            }
-                            
-                        }
-                        else if (key == Buttons.LeftThumbstickUp)
-                        {
-                            if (oldID > 0)
-                            {
-                                this.currentlySnappedComponent = this.getComponentWithID(oldID - 1);
-                            }
-                            else if (oldID == 0)
-                            {
-                                this.currentlySnappedComponent = this.getComponentWithID(upperRightCloseButton.myID);
-                            }
-                            
-                        }
-
-                    }
-
-                    this.snapCursorToCurrentSnappedComponent();
                 }
-            }
-        }
+                /* We do actually have tasks */
+                else
+                {
 
-        /// <summary>
-        /// Add the description typed into the text box as a clickable task on the to do list.
-        /// </summary>
-        public void addTask()
-        {
-            /* Only add the task if the text box isn't empty */
+                   if (key == Buttons.LeftThumbstickDown)
+                   {
+                       if (oldID == this.upperRightCloseButton.myID)
+                       {
+                           snapToDefaultClickableComponent();
+                       }
+                   }
+                   else if (key == Buttons.LeftThumbstickUp)
+                   {
+                       if (oldID == taskType.doneNamingButton.myID)
+                       {
+                           this.currentlySnappedComponent = this.getComponentWithID(this.taskPages[currentPage].Count - 1);
+                       }
+                   }
+
+
+                   if (oldID >= 0 && oldID < tasksPerPage && this.TaskPage == -1)
+                   {
+                       if (key == Buttons.LeftThumbstickDown)
+                       {
+
+                           if (oldID < tasksPerPage - 1 && this.taskPages[this.currentPage].Count - 1 > oldID)
+                               this.currentlySnappedComponent = this.getComponentWithID(oldID + 1);
+                           else
+                           {
+                               this.currentlySnappedComponent = this.getComponentWithID(taskType.doneNamingButton.myID);
+                           }
+
+                       }
+                       else if (key == Buttons.LeftThumbstickUp)
+                       {
+                           if (oldID > 0)
+                           {
+                               this.currentlySnappedComponent = this.getComponentWithID(oldID - 1);
+                           }
+                           else if (oldID == 0)
+                           {
+                               this.currentlySnappedComponent = this.getComponentWithID(upperRightCloseButton.myID);
+                           }
+
+                       }
+
+                   }                   
+               }
+               this.snapCursorToCurrentSnappedComponent();
+            }
+       }
+
+       /// <summary>
+       /// Add the description typed into the text box as a clickable task on the to do list.
+       /// </summary>
+       public void AddTask()
+       {
+           /* Only add the task if the text box isn't empty */
             if (!(this.taskType.textBox.Text).Equals(""))
             {
                 /* Add the typed text to the list for the config file and save it. */
@@ -453,11 +469,10 @@ namespace ToDoMod
                 this.SaveData();
                 /* Clear the text box for the next thing to be typed in. */
                 this.taskType.textBox.Text = "";
-                this.reload();
+                this.Reload();
             }
             
         }
-
 
         /// <summary>
         /// Draw the to do list components. 
@@ -509,8 +524,10 @@ namespace ToDoMod
 
         }
 
+        /* Not used but needs implementing */
+        public override void receiveRightClick(int x, int y, bool playSound = true)
+        {
 
-
-        
+        }
     }
 }
