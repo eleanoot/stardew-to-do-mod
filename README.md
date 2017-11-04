@@ -21,8 +21,7 @@
 * Tasks are saved between sessions and are individual to each save file, so any saved tasks will still be in the list when you next load that save.
 
 ## Configure
-The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
-file if you want. Applied settings will be in effect for every save file. These are the available settings:
+The mod can be configured to change its default settings and enable additional features by editing the "config.json" file. Applied settings are in effect for every save file. 
 
 | setting           | default |what it affects
 | ----------------- | --------|-------------------
