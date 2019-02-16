@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -18,11 +19,6 @@ namespace ToDoMod
         /// The mod settings.
         /// </summary>
         private readonly ModConfig Config;
-
-        /// <summary>
-        /// Saving the mod settings.
-        /// </summary>
-        private readonly Action SaveConfig;
 
         /// <summary>
         /// The save file's task list.
@@ -82,12 +78,10 @@ namespace ToDoMod
         /*********
         ** Public methods
         *********/
-
-        public ToDoList(int currentIndex, ModConfig config, Action saveConfig, ModData data, Action saveData) : base(0, 0, 0, 0, true)
+        public ToDoList(int currentIndex, ModConfig config, ModData data, Action saveData) : base(0, 0, 0, 0, true)
         {
             /* Hang onto those mod config and saved task list files */
             this.Config = config;
-            this.SaveConfig = saveConfig;
             this.Data = data;
             this.SaveData = saveData;
 
@@ -344,16 +338,17 @@ namespace ToDoMod
         /// </summary>
         public override void receiveKeyPress(Keys key)
         {
+            SButton button = key.ToSButton();
+
             /* If the to do list is open and we've hit escape or the configured open list key */
-            if (((key == Keys.Escape) || key.ToString().Equals(this.Config.OpenListKey)) && this.readyToClose() && this.CanClose)
+            if ((button == SButton.Escape || button == this.Config.OpenListKey) && this.readyToClose() && this.CanClose)
             {
                 isOpen = false;
                 CanClose = false;
                 Game1.exitActiveMenu();
-                return;
             }
             /* If the to do list is open and we've hit enter */
-            else if ((isOpen) && (key == Keys.Enter))
+            else if (isOpen && (button == SButton.Enter))
             {
                 AddTask();
             }
@@ -361,9 +356,7 @@ namespace ToDoMod
             else
             {
                 this.CanClose = true;
-                return;
             }
-
         }
 
         /// <summary>
@@ -492,7 +485,7 @@ namespace ToDoMod
             {
                 for (int index = 0; index < this.taskPageButtons.Count; ++index)
                 {
-                    if (this.taskPages.Count<List<String>>() > 0 && this.taskPages[this.currentPage].Count<String>() > index)
+                    if (this.taskPages.Count > 0 && this.taskPages[this.currentPage].Count > index)
                     {
                         IClickableMenu.drawTextureBox(batch, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), this.taskPageButtons[index].bounds.X, this.taskPageButtons[index].bounds.Y, this.taskPageButtons[index].bounds.Width - IClickableMenu.borderWidth / 4 - 20, this.taskPageButtons[index].bounds.Height, this.taskPageButtons[index].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, (float)Game1.pixelZoom, false);
                         if (this.Config.UseLargerFont)

@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using StardewModdingAPI;
 
 namespace ToDoMod
 {
     class ModConfig
     {
-        public string OpenListKey { get; set; } = Keys.F2.ToString();
+        public SButton OpenListKey { get; set; } = SButton.F2;
 
         public bool UseLargerFont { get; set; }
 
