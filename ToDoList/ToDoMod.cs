@@ -1,10 +1,8 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Menus;
-
-using Microsoft.Xna.Framework.Input;
 
 namespace ToDoMod
 {
@@ -12,8 +10,8 @@ namespace ToDoMod
     public class ModEntry : Mod
     {
         /********
-         ** Properties
-         ********/
+        ** Properties
+        ********/
         /// <summary>
         /// The mod settings.
         /// </summary>
@@ -24,12 +22,14 @@ namespace ToDoMod
         /// </summary>
         private ModData Data;
 
+
         /********
-         ** Public methods
-         ********/
+        ** Public methods
+        ********/
         /// <summary>
         /// The mod entry point, called after the mod is first loaded.
         /// </summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>() ?? new ModConfig();
@@ -48,9 +48,10 @@ namespace ToDoMod
             }
         }
 
+
         /********
-         ** Private methods
-         ********/
+        ** Private methods
+        ********/
         /// <summary>
         /// Update the mod's config.json file from the current <see cref="Config"/>.
         /// </summary>
@@ -94,7 +95,7 @@ namespace ToDoMod
                 if (e.ButtonPressed.ToString() == this.Config.OpenListKey)
                     this.OpenList();
             }
-           
+
         }
 
         /// <summary>The method called after the player loads their save.</summary>

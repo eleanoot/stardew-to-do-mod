@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -15,14 +12,12 @@ namespace ToDoMod
         public TextBox textBox;
         public ClickableComponent textBoxCC;
         private TextBoxEvent e;
-        
-        public const int region_doneNamingButton = 202;
 
         public ClickableTextureComponent doneNamingButton;
 
         public TaskType(SpriteFont fontToUse)
         {
-            this.textBox = new TextBox((Texture2D)null, (Texture2D)null, fontToUse, Game1.textColor)
+            this.textBox = new TextBox(null, null, fontToUse, Game1.textColor)
             {
                 /* Positioning stuff */
                 Width = Game1.tileSize * 13 - (IClickableMenu.borderWidth * 2),
@@ -31,14 +26,14 @@ namespace ToDoMod
             Vector2 centeringOnScreen = Utility.getTopLeftPositionForCenteringOnScreen(this.textBox.Width, this.textBox.Height, 0, 0);
             this.textBox.X = (int)centeringOnScreen.X - 2;
             this.textBox.Y = Game1.viewport.Height / 2 + 200;
-           
+
             this.textBox.OnEnterPressed += this.e;
-            Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.textBox;
+            Game1.keyboardDispatcher.Subscriber = this.textBox;
             this.textBox.Text = "";
             this.textBox.Selected = true;
             this.textBox.limitWidth = true;
 
-            ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.textBox.X + this.textBox.Width + Game1.tileSize + Game1.tileSize * 3 / 4 - Game1.pixelZoom * 2, Game1.viewport.Height / 2 + Game1.pixelZoom, Game1.tileSize, Game1.tileSize), Game1.mouseCursors, new Rectangle(381, 361, 10, 10), (float)Game1.pixelZoom, false);
+            ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.textBox.X + this.textBox.Width + Game1.tileSize + Game1.tileSize * 3 / 4 - Game1.pixelZoom * 2, Game1.viewport.Height / 2 + Game1.pixelZoom, Game1.tileSize, Game1.tileSize), Game1.mouseCursors, new Rectangle(381, 361, 10, 10), Game1.pixelZoom, false);
             int num1 = 203;
             textureComponent1.myID = num1;
             int num2 = 202;
@@ -58,7 +53,7 @@ namespace ToDoMod
                 myID = 204,
                 rightNeighborID = 202
             };
-            
+
 
 
         }
@@ -84,8 +79,6 @@ namespace ToDoMod
             this.doneNamingButton.draw(batch);
         }
 
-        public bool Selected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         /// <summary>
         /// Not used, but needs implementing
         /// </summary>
@@ -94,9 +87,4 @@ namespace ToDoMod
 
         }
     }
-
-
-
-
-
 }

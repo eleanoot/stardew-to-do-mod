@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -28,7 +27,7 @@ namespace ToDoMod
         /// <summary>
         /// The save file's task list.
         /// </summary>
-        private ModData Data;
+        private readonly ModData Data;
 
         /// <summary>
         /// Saving the updated task list.
@@ -54,7 +53,7 @@ namespace ToDoMod
         /// The font to use for the text box and list - depends on whether user chose to use larger font or not.
         /// </summary>
         private SpriteFont listFont;
-        
+
         /// <summary>
         /// All of the pages and their included tasks.
         /// </summary>
@@ -74,13 +73,11 @@ namespace ToDoMod
         /// <summary>
         /// Navigation stuff
         /// </summary>
-        public const int region_forwardButton = 101;
-        public const int region_backButton = 102;
         public ClickableTextureComponent forwardButton;
         public ClickableTextureComponent backButton;
         private int TaskPage = -1;
         public const int tasksPerPage = 5;
-        
+
 
         /*********
         ** Public methods
@@ -116,7 +113,7 @@ namespace ToDoMod
 
             /* Create the text box and its confirmation button */
             taskType = new TaskType(this.listFont);
-            
+
             /* Load in the saved tasks */
             this.loadedTaskNames = new List<String>();
             LoadTaskList();
@@ -157,20 +154,20 @@ namespace ToDoMod
             int num7 = 101;
             textureComponent2.myID = num7;
             this.forwardButton = textureComponent2;
-            
+
             /* Split the tasks into pages */
             PageTasks();
 
             /* The to do list is open for business */
             isOpen = true;
-            
+
             /* If we're not using a controller or snappy menus, we're done */
             if (!Game1.options.SnappyMenus)
                 return;
-                
+
             /* Add the clickable components to be able to snap to them */
             this.populateClickableComponentList();
-            for (int i=0; i<tasksPerPage; ++i)
+            for (int i = 0; i < tasksPerPage; ++i)
             {
                 this.allClickableComponents.Add(taskPageButtons[i]);
             }
@@ -179,7 +176,7 @@ namespace ToDoMod
 
             //File.WriteAllText("C:\\Users\\grego\\source\\repos\\ToDoMod\\ToDoMod\\Debug.txt", this.taskPages[currentPage].Count.ToString());
         }
-        
+
         /// <summary>
         /// Snap the cursor to the top of the clickable tasks.
         /// </summary>
@@ -193,7 +190,7 @@ namespace ToDoMod
             {
                 this.currentlySnappedComponent = this.getComponentWithID(this.taskType.doneNamingButton.myID);
             }
-            
+
             this.snapCursorToCurrentSnappedComponent();
         }
 
@@ -219,8 +216,8 @@ namespace ToDoMod
         /// </summary>
         private void PageTasks()
         {
-            this.taskPages = new List<List<String>>();
-            
+            this.taskPages = new List<List<string>>();
+
             /* Load the tasks onto the page in reverse order, oldest at the bottom */
             /* Oldest = index 0 in the saved list */
             for (int index = loadedTaskNames.Count - 1; index >= 0; --index)
@@ -230,8 +227,8 @@ namespace ToDoMod
                     this.taskPages.Add(new List<String>());
                 this.taskPages[num / tasksPerPage].Add(loadedTaskNames[index]);
             }
-            
-            
+
+
             /* Debug - tasks loaded in newest at the bottom */
             /*
             for (int index = 0; index < loadedTaskNames.Count; ++index)
@@ -302,7 +299,7 @@ namespace ToDoMod
                         {
                             /* Debug - New tasks at end */
                             //valueToRemove = index + tasksPerPage * currentPage;
-                            
+
                             valueToRemove = loadedTaskNames.Count - 1 - index - (tasksPerPage * currentPage);
                         }
 
@@ -324,12 +321,12 @@ namespace ToDoMod
                     this.TaskPageBackButton();
                 }
                 /* In case someone selects the text box */
-                else if (this.taskType.textBoxCC.containsPoint(x,y))
+                else if (this.taskType.textBoxCC.containsPoint(x, y))
                 {
                     return;
                 }
                 /* If we clicked the ok button */
-                else if (this.taskType.doneNamingButton.containsPoint(x,y))
+                else if (this.taskType.doneNamingButton.containsPoint(x, y))
                 {
                     AddTask();
                 }
@@ -366,7 +363,7 @@ namespace ToDoMod
                 this.CanClose = true;
                 return;
             }
-            
+
         }
 
         /// <summary>
@@ -386,11 +383,11 @@ namespace ToDoMod
                 this.TaskPageForwardButton();
             }
 
-            
 
-           if (Game1.options.SnappyMenus)
-           {
-               int oldID = this.currentlySnappedComponent.myID;
+
+            if (Game1.options.SnappyMenus)
+            {
+                int oldID = this.currentlySnappedComponent.myID;
 
                 /* When there's no tasks in the list */
                 if (!this.taskPages.Any())
@@ -409,60 +406,60 @@ namespace ToDoMod
                 {
 
                     /* Jumping from tasks to close/done button */
-                   if (key == Buttons.LeftThumbstickDown)
-                   {
-                       if (oldID == this.upperRightCloseButton.myID)
-                       {
-                           snapToDefaultClickableComponent();
-                       }
-                   }
-                   else if (key == Buttons.LeftThumbstickUp)
-                   {
-                       if (oldID == taskType.doneNamingButton.myID)
-                       {
-                           this.currentlySnappedComponent = this.getComponentWithID(this.taskPages[currentPage].Count - 1);
-                       }
-                   }
+                    if (key == Buttons.LeftThumbstickDown)
+                    {
+                        if (oldID == this.upperRightCloseButton.myID)
+                        {
+                            snapToDefaultClickableComponent();
+                        }
+                    }
+                    else if (key == Buttons.LeftThumbstickUp)
+                    {
+                        if (oldID == taskType.doneNamingButton.myID)
+                        {
+                            this.currentlySnappedComponent = this.getComponentWithID(this.taskPages[currentPage].Count - 1);
+                        }
+                    }
 
-                   /* Jumping between tasks */
-                   if (oldID >= 0 && oldID < tasksPerPage && this.TaskPage == -1)
-                   {
-                       if (key == Buttons.LeftThumbstickDown)
-                       {
+                    /* Jumping between tasks */
+                    if (oldID >= 0 && oldID < tasksPerPage && this.TaskPage == -1)
+                    {
+                        if (key == Buttons.LeftThumbstickDown)
+                        {
 
-                           if (oldID < tasksPerPage - 1 && this.taskPages[this.currentPage].Count - 1 > oldID)
-                               this.currentlySnappedComponent = this.getComponentWithID(oldID + 1);
-                           else
-                           {
-                               this.currentlySnappedComponent = this.getComponentWithID(taskType.doneNamingButton.myID);
-                           }
+                            if (oldID < tasksPerPage - 1 && this.taskPages[this.currentPage].Count - 1 > oldID)
+                                this.currentlySnappedComponent = this.getComponentWithID(oldID + 1);
+                            else
+                            {
+                                this.currentlySnappedComponent = this.getComponentWithID(taskType.doneNamingButton.myID);
+                            }
 
-                       }
-                       else if (key == Buttons.LeftThumbstickUp)
-                       {
-                           if (oldID > 0)
-                           {
-                               this.currentlySnappedComponent = this.getComponentWithID(oldID - 1);
-                           }
-                           else if (oldID == 0)
-                           {
-                               this.currentlySnappedComponent = this.getComponentWithID(upperRightCloseButton.myID);
-                           }
+                        }
+                        else if (key == Buttons.LeftThumbstickUp)
+                        {
+                            if (oldID > 0)
+                            {
+                                this.currentlySnappedComponent = this.getComponentWithID(oldID - 1);
+                            }
+                            else if (oldID == 0)
+                            {
+                                this.currentlySnappedComponent = this.getComponentWithID(upperRightCloseButton.myID);
+                            }
 
-                       }
+                        }
 
-                   }                   
-               }
-               this.snapCursorToCurrentSnappedComponent();
+                    }
+                }
+                this.snapCursorToCurrentSnappedComponent();
             }
-       }
+        }
 
-       /// <summary>
-       /// Add the description typed into the text box as a clickable task on the to do list.
-       /// </summary>
-       public void AddTask()
-       {
-           /* Only add the task if the text box isn't empty */
+        /// <summary>
+        /// Add the description typed into the text box as a clickable task on the to do list.
+        /// </summary>
+        public void AddTask()
+        {
+            /* Only add the task if the text box isn't empty */
             if (!(this.taskType.textBox.Text).Equals(""))
             {
                 /* Add the typed text to the list for the config file and save it. */
@@ -472,7 +469,7 @@ namespace ToDoMod
                 this.taskType.textBox.Text = "";
                 this.Reload();
             }
-            
+
         }
 
         /// <summary>
@@ -484,13 +481,13 @@ namespace ToDoMod
             batch.End();
 
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            
+
             this.taskType.draw(batch);
 
             /* Task boxes on this page. */
 
-            Vector2 centeringInTaskBox = Utility.getTopLeftPositionForCenteringOnScreen(this.taskPageButtons[0].bounds.X, this.taskPageButtons[0].bounds.Y, 0, 0); 
-            
+            Vector2 centeringInTaskBox = Utility.getTopLeftPositionForCenteringOnScreen(this.taskPageButtons[0].bounds.X, this.taskPageButtons[0].bounds.Y, 0, 0);
+
             if (this.TaskPage == -1)
             {
                 for (int index = 0; index < this.taskPageButtons.Count; ++index)
@@ -519,7 +516,7 @@ namespace ToDoMod
 
             base.draw(batch);
 
-           Game1.mouseCursorTransparency = 1f;
+            Game1.mouseCursorTransparency = 1f;
             this.drawMouse(batch);
 
 

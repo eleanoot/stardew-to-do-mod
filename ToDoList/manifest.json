@@ -1,13 +1,9 @@
 ﻿{
-   "Name": "To Do List",
-   "Author": "eleanoot",
-   "Version": {
-      "MajorVersion": 1,
-      "MinorVersion": 0,
-      "PatchVersion": 0,
-      "Build": null
-   },
-   "Description": "Record the other little tasks you were up to.",
-   "UniqueID": "eleanoot.todolist",
-   "EntryDll": "ToDoMod.dll"
+  "Name": "To Do List",
+  "Author": "eleanoot",
+  "Version": "1.1.3",
+  "Description": "Record the other little tasks you were up to.",
+  "UniqueID": "eleanoot.todolist",
+  "EntryDll": "ToDoMod.dll",
+  "UpdateKeys": [ "Nexus:1630" ]
 }
