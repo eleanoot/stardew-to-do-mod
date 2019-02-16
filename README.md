@@ -1,6 +1,6 @@
 **To Do List** is a [Stardew Valley](http://stardewvalley.net/) mod that adds a menu allowing you to type small reminders for tasks you want to complete. 
 
-![](Screenshots/usage.gif)
+![](ToDoList/screenshots/usage.gif)
 
 ## Contents
 * [Install](#install)
@@ -11,7 +11,7 @@
 
 ## Install
 1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
-2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/NEXUSLINK/).
+2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/1630).
 3. Run the game using SMAPI.
 
 ## Use
@@ -30,5 +30,11 @@ The mod can be configured to change its default settings and enable additional f
 | `OpenOnStartup` | false | If enabled, as soon as your save file is loaded, the to do list will appear to remind you of the tasks you had saved since last time.
 
 ## Versions
+1.1.2:
+* Fixed repeated update alerts.
+
+1.1:
+* Updated for Stardew Valley 1.3.
+
 1.0:
 * Initial release.
